@@ -20,7 +20,15 @@ The ground control software will be multiple software modules passing "frame buf
 ** Gamma correction
 ** Node control
 ** Frame rate control
+** Visualizer
 
 ### Packet formats
 Frame buffer: JSON packet containing a 2D array of RGB pixel values (each int), and a source name field
 Sky buffer: A list of uint8s, every 3 bytes is a pixel. Each node reads its values by indexing to 3*<node address>.
+
+### Running ground control software
+Each module will be run independently. Each module will take the following base arguments, followed by any additional arguments it may need:
+$ python <module> <input_port> <destination_addr>
+module: The name of the module to run
+input_port: The port to listen on for frame buffer packets
+destination_addr: The host:port (or assuming localhost if just a port is provided) to send frame buffers to
