@@ -1,6 +1,10 @@
 # constellation
 LED baloons in the desert
 
+## Codebase
+
+Ground code is written in Python 3.6.1 x64 on windows, but should be compatible with 32 bit.
+
 ## System architecture
 Each balloon will have a wireless controlled node with an RGB LED. Each node will light up per values in a command packet set to the node network from the ground control station.
 
