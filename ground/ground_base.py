@@ -1,6 +1,6 @@
 import argparse
-import cStringIO
 import json
+import base64
 import socket
 import struct
 
@@ -26,7 +26,7 @@ class Frame(object):
             self.source = unpacked["source"]
             self.width = unpacked["width"]
             self.height = unpacked["height"]
-            self.image = Image.frombuffer(MODE, (self.width, self.height), bytes(unpacked["image"]))
+            self.image = Image.frombuffer(MODE, (self.width, self.height), base64.b64decode(unpacked["image"]))
         except Exception as ex:
             print("Error {}: Unable to unpack {}".format(ex, serialized))
 
@@ -39,12 +39,14 @@ class Frame(object):
         payload = {"source": self.source,
                    "width": self.width,
                    "height": self.height,
-                   "image" : list(self.image.tobytes())
+                   "image" : str(base64.b64encode(self.image.tobytes()))
                   }
         try:
-            return json.dumps(payload)
+            return bytes(json.dumps(payload), encoding='UTF-8')
         except Exception as ex:
-            print("Error {}: Unable to pack {}".format(ex, payload))
+            print(ex)
+            raise
+            #print("Error {}: Unable to pack {}".format(ex, payload))
             return ""
 
 
@@ -80,6 +82,7 @@ class GroundBase(object):
             dest_host = "localhost"
         except ValueError:
             dest_host, dest_port = dest.split(":")
+            dest_port = int(dest_port)
         self.dest_addr = (dest_host, dest_port)
 
     def register_frame_received(self, handler):
@@ -91,29 +94,42 @@ class GroundBase(object):
         
     def wait_for_frames(self):
         self.in_sock.bind(("0.0.0.0", self.args.listen_port))
+        self.in_sock.settimeout(0.1)
         while True:
-            data = self.in_sock.recv(4096)
+            try:
+                data = self.in_sock.recv(4096)
+            except socket.timeout:
+                continue
             self.in_buffer += data
             try:
+                print(len(self.in_buffer))
                 start = self.in_buffer.index(PACKET_HEADER)
                 if start > 0:
                     self.in_buffer = self.in_buffer[start:]
-                    payload_size = struct.unpack(">I", self.in_buffer[len(PACKET_HEADER)])
-                    if len(PACKET_HEADER) + 4 + payload_size >= len(self.in_buffer):
-                        payload = self.in_buffer[len(PACKET_HEADER) + 4:len(PACKET_HEADER) + 4 + payload_size]
-                        frame = Frame(serialized=payload)
-                        if self.handler:
-                            self.handler(frame)
-                        self.in_buffer = self.in_buffer[len(PACKET_HEADER) + 4 + payload_size:]
-            except ValueError:  # haven't gotten new packet header
-                pass
+                payload_size, = struct.unpack(">I", self.in_buffer[len(PACKET_HEADER):len(PACKET_HEADER)+4])
+                print(payload_size)
+                if len(PACKET_HEADER) + 4 + payload_size <= len(self.in_buffer):
+                    payload = self.in_buffer[len(PACKET_HEADER) + 4:len(PACKET_HEADER) + 4 + payload_size]
+                    frame = Frame(serialized=payload)
+                    if self.handler:
+                        print('handling frame')
+                        self.handler(frame)
+                    else:
+                        print("Got unhandled frame {}".format(frame))
+                    self.in_buffer = self.in_buffer[len(PACKET_HEADER) + 4 + payload_size:]
+            except ValueError as err:  # haven't gotten new packet header
+                print(err)
         
     def send_frame(self, frame):
         serialized = frame.serialize()
         if serialized:
             try:
-                packet = PACKET_HEADER + struct.pack(">I", len(serialized)) + serialized
-                self.out_sock.sendto(packet, self.dest_addr)
+                packet = PACKET_HEADER + bytes(struct.pack(">I", len(serialized))) + serialized
+                print("Outgoing packet len: {}".format(len(packet)))
+                CHUNK_SIZE = 4096
+                while len(packet) > CHUNK_SIZE:
+                    self.out_sock.sendto(packet[:CHUNK_SIZE], self.dest_addr)
+                    packet = packet[CHUNK_SIZE:]
             except socket.error as err:
                 pass  # Destination no longer exists, fail silently
                 print(err)
