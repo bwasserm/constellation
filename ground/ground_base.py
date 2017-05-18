@@ -1,6 +1,4 @@
 import argparse
-import json
-import base64
 import socket
 import struct
 
@@ -12,6 +10,11 @@ PACKET_HEADER = b"CONSTELLATION"
 
 class Frame(object):
     def __init__(self, serialized="", source="", width=0, height=0, image=None):
+        self.source = ""
+        self.width = 0
+        self.height = 0
+        self.image = None
+
         if serialized:
             self.deserialize(serialized)
         else:
@@ -22,31 +25,33 @@ class Frame(object):
 
     def deserialize(self, serialized):
         try:
-            unpacked = json.loads(serialized)
-            self.source = unpacked["source"]
-            self.width = unpacked["width"]
-            self.height = unpacked["height"]
-            self.image = Image.frombuffer(MODE, (self.width, self.height), base64.b64decode(unpacked["image"]))
+            source_len,  = struct.unpack(">I", serialized[:4])
+            self.source, = struct.unpack_from(">{}s".format(source_len), serialized, offset=4)
+            self.width, self.height, image_len = struct.unpack_from(">III", serialized, offset=(4+source_len))
+            self.image = Image.frombuffer(MODE, (self.width, self.height), serialized[(4+source_len+12):], 'raw', MODE, 0, 1)
         except Exception as ex:
-            print("Error {}: Unable to unpack {}".format(ex, serialized))
+            print("Error {}: Unable to unpack".format(ex))
+            raise
 
     def serialize(self):
         """ Convert the frame to a payload to send
 
             Returns:
-                The jsonified string to transmit
+                The packed string to transmit
         """
-        payload = {"source": self.source,
-                   "width": self.width,
-                   "height": self.height,
-                   "image" : str(base64.b64encode(self.image.tobytes()))
-                  }
         try:
-            return bytes(json.dumps(payload), encoding='UTF-8')
+            image_bytes = self.image.tobytes()
+            return struct.pack(">I{}sIII{}B".format(len(self.source), len(image_bytes)),
+                               len(self.source),
+                               bytes(self.source, "UTF-8"),
+                               self.width,
+                               self.height,
+                               len(image_bytes),
+                               *image_bytes)
         except Exception as ex:
             print(ex)
             raise
-            #print("Error {}: Unable to pack {}".format(ex, payload))
+            print("Error {}: Unable to pack {}".format(ex, payload))
             return ""
 
 
@@ -102,23 +107,24 @@ class GroundBase(object):
                 continue
             self.in_buffer += data
             try:
-                print(len(self.in_buffer))
+                # print("buffer size", len(self.in_buffer))
                 start = self.in_buffer.index(PACKET_HEADER)
                 if start > 0:
                     self.in_buffer = self.in_buffer[start:]
                 payload_size, = struct.unpack(">I", self.in_buffer[len(PACKET_HEADER):len(PACKET_HEADER)+4])
-                print(payload_size)
+                # print("payload size", payload_size)
                 if len(PACKET_HEADER) + 4 + payload_size <= len(self.in_buffer):
                     payload = self.in_buffer[len(PACKET_HEADER) + 4:len(PACKET_HEADER) + 4 + payload_size]
                     frame = Frame(serialized=payload)
                     if self.handler:
-                        print('handling frame')
+                        # print('handling frame')
                         self.handler(frame)
                     else:
-                        print("Got unhandled frame {}".format(frame))
+                        print("Got unhandled frame")
+                        # print("Got unhandled frame {}".format(frame.width))
                     self.in_buffer = self.in_buffer[len(PACKET_HEADER) + 4 + payload_size:]
             except ValueError as err:  # haven't gotten new packet header
-                print(err)
+                pass # print(err)
         
     def send_frame(self, frame):
         serialized = frame.serialize()
@@ -132,4 +138,4 @@ class GroundBase(object):
                     packet = packet[CHUNK_SIZE:]
             except socket.error as err:
                 pass  # Destination no longer exists, fail silently
-                print(err)
+                # print(err)
