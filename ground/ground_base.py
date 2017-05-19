@@ -12,7 +12,7 @@ MODE = "RGB"
 PACKET_HEADER = b"CONSTELLATION"
 
 
-def _bytes(src, enc=None):
+def _bytes(src, enc="UTF-8"):
     if PY3:
         return bytes(src, enc)
     else:
@@ -140,7 +140,7 @@ class GroundBase(object):
         serialized = frame.serialize()
         if serialized:
             try:
-                packet = PACKET_HEADER + _bytes(struct.pack(">I", len(serialized))) + serialized
+                packet = PACKET_HEADER + struct.pack(">I", len(serialized)) + serialized
                 print("Outgoing packet len: {}".format(len(packet)))
                 CHUNK_SIZE = 4096
                 while len(packet) > CHUNK_SIZE:
