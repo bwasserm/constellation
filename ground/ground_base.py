@@ -1,12 +1,22 @@
+from __future__ import print_function
 import argparse
 import socket
 import struct
+import sys
 
 from PIL import Image
 
+PY3 = sys.version_info[0] == 3
 
 MODE = "RGB"
 PACKET_HEADER = b"CONSTELLATION"
+
+
+def _bytes(src, enc=None):
+    if PY3:
+        return bytes(src, enc)
+    else:
+        return str(src)
 
 class Frame(object):
     def __init__(self, serialized="", source="", width=0, height=0, image=None):
@@ -41,13 +51,13 @@ class Frame(object):
         """
         try:
             image_bytes = self.image.tobytes()
-            return struct.pack(">I{}sIII{}B".format(len(self.source), len(image_bytes)),
+            return struct.pack(">I{}sIII{}s".format(len(self.source), len(image_bytes)),
                                len(self.source),
-                               bytes(self.source, "UTF-8"),
+                               _bytes(self.source, "UTF-8"),
                                self.width,
                                self.height,
                                len(image_bytes),
-                               *image_bytes)
+                               image_bytes)
         except Exception as ex:
             print(ex)
             raise
@@ -130,7 +140,7 @@ class GroundBase(object):
         serialized = frame.serialize()
         if serialized:
             try:
-                packet = PACKET_HEADER + bytes(struct.pack(">I", len(serialized))) + serialized
+                packet = PACKET_HEADER + _bytes(struct.pack(">I", len(serialized))) + serialized
                 print("Outgoing packet len: {}".format(len(packet)))
                 CHUNK_SIZE = 4096
                 while len(packet) > CHUNK_SIZE:
