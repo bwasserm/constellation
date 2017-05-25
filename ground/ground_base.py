@@ -3,6 +3,7 @@ import argparse
 import socket
 import struct
 import sys
+import time
 
 from PIL import Image
 
@@ -31,7 +32,7 @@ class Frame(object):
             self.source = source
             self.width = width
             self.height = height
-            self.image = image if image is None else Image.new(MODE, (self.width, self.height))
+            self.image = image if image is not None else Image.new(MODE, (self.width, self.height))
 
     def deserialize(self, serialized):
         try:
@@ -114,10 +115,11 @@ class GroundBase(object):
             try:
                 data = self.in_sock.recv(4096)
             except socket.timeout:
+                time.sleep(0.1)
                 continue
             self.in_buffer += data
             try:
-                # print("buffer size", len(self.in_buffer))
+                #print("buffer size", len(self.in_buffer))
                 start = self.in_buffer.index(PACKET_HEADER)
                 if start > 0:
                     self.in_buffer = self.in_buffer[start:]
@@ -143,9 +145,13 @@ class GroundBase(object):
                 packet = PACKET_HEADER + struct.pack(">I", len(serialized)) + serialized
                 print("Outgoing packet len: {}".format(len(packet)))
                 CHUNK_SIZE = 4096
-                while len(packet) > CHUNK_SIZE:
+                while len(packet):
                     self.out_sock.sendto(packet[:CHUNK_SIZE], self.dest_addr)
-                    packet = packet[CHUNK_SIZE:]
+                    if len(packet) > CHUNK_SIZE:
+                        packet = packet[CHUNK_SIZE:]
+                    else:
+                        break
             except socket.error as err:
+                print("Failed to send")
                 pass  # Destination no longer exists, fail silently
                 # print(err)
