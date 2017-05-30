@@ -79,10 +79,12 @@ class GroundBase(object):
         self.in_buffer = b''
         
         # Set up command line arguments
-        self.argparse.add_argument('dest_addr',
-                                   help="Address to send frame packets to, if no host provided default localhost")
-        self.argparse.add_argument('listen_port', type=int,
-                                   help="Port to listen for frame packets on")
+        self.argparse.add_argument('--dest_addr',
+                                   help="Address to send frame packets to, if no host provided default localhost",
+                                   default="localhost:10001")
+        self.argparse.add_argument('--listen_port', type=int,
+                                   help="Port to listen for frame packets on",
+                                   default=10002)
         
     def parse_args(self):
         self.args = self.argparse.parse_args()

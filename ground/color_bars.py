@@ -11,8 +11,13 @@ def main():
     ground.parse_args()
 
     file_path = "color_bars.jpg"
+    #file_path = "pixels2.bmp"
     im = Image.open(file_path)
     print(im, im.getpixel((0,0)))
+    pixels = im.load()
+    for j in range(im.height):
+        for i in range(im.width):
+            print(i, j, pixels[i, j])
 
     width, height = im.size
     frame = Frame(source="color_bars", width=width, height=height, image=im)

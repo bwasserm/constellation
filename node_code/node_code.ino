@@ -10,7 +10,7 @@
 #define HEADER_SIZE strlen(HEADER)
 #define FOOTER "LATION"
 #define FOOTER_SIZE strlen(FOOTER)
-// Packet = CONSTELLATION\0[pixels:rgb]
+// Packet = CONSTEL[pixels:rgb]LATION
 #define PACKET_LEN ((HEADER_SIZE) + 4 * (MAX_NUM_NODES) + FOOTER_SIZE)
 #define BUFFER_SIZE (2 * (PACKET_LEN))
 #define RED_OFFSET 0
