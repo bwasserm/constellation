@@ -13,7 +13,7 @@ class NodeOutput(object):
 
     NUM_NODES = 100
 
-    def __init__(self, patch, serial_name, ip_addr):
+    def __init__(self, patch, serial_name, ip_addr, down_res):
         self.patch = patch
         if serial_name:
             self.serial = serial.Serial(serial_name)
@@ -21,6 +21,7 @@ class NodeOutput(object):
         else:
             self.serial = None
         self.node_struct = struct.Struct(">BBBB")
+        self.down_res = down_res
 
     def __del__(self):
         if self.serial:
@@ -48,10 +49,22 @@ class NodeOutput(object):
     def send_packet_ip(self, packet):
         pass
 
-    def reduce_image(self, frame, width, height):
-        frame.image = frame.image.resize((width, height), resample=Image.BILINEAR)
-        frame.width = width
-        frame.height = height
+    def reduce_image(self, frame, height, width):
+        print("original", frame.height, frame.width)
+        im_matrix = frame.image.load()
+        for row in range(frame.height):
+            for col in range(frame.width):
+                print(["%x" % c for c in im_matrix[col, row]], end='')
+            print('')
+        frame.image = frame.image.resize((width, height), resample=Image.ANTIALIAS)
+        frame.width = frame.image.width
+        frame.height = frame.image.height
+        print("smaller", frame.height, frame.width)
+        im_matrix = frame.image.load()
+        for row in range(frame.image.height):
+            for col in range(frame.image.width):
+                print(["%x" % c for c in im_matrix[col, row]], end='')
+            print('')
 
     def map_pixels(self, image):
         width = image.width
@@ -62,19 +75,32 @@ class NodeOutput(object):
 
         # Map each node to a closes
         for node_id, relloc in self.patch.items():
-            x = relloc[0] * (height-1)
-            y = relloc[1] * (width-1)
-            nodes[node_id] = pixels[x, y]
+            x = int(relloc[0] * (height-1))
+            y = int(relloc[1] * (width-1))
+            print(node_id, relloc, x, y)
+            nodes[node_id] = pixels[y, x]
 
         return nodes
 
     def handle_frame(self, frame):
         print("we got one", frame.source, frame.image.size)
-        self.reduce_image(frame, 10, 10)
+        im = frame.image.load()
+
+        self.reduce_image(frame, self.down_res[0], self.down_res[1])
+        im_matrix = frame.image.load()
+        for row in range(frame.image.height):
+            for col in range(frame.image.width):
+                print(["%x" % c for c in im_matrix[col, row]], end='')
+            print('')
         nodes = self.map_pixels(frame.image)
         packet = self.generate_packet(nodes)
         self.send_packet_serial(packet)
         self.send_packet_ip(packet)
+        #print(["%x" % c for c in packet])
+        print([chr(c) for c in packet[:7]])
+        for node in range(self.NUM_NODES):
+            print(["%x" % c for c in packet[(7+node*4):(7+(node+1)*4)]])
+        print([chr(c) for c in packet[-6:]])
 
 
 def main():
@@ -84,14 +110,19 @@ def main():
                                  default="./node_patch.json")
     ground.argparse.add_argument("--serial_port",
                                  help="Serial port to outpute path")
+    ground.argparse.add_argument("--downsample_res",
+                                 help="Size to reduce image to before sending to nodes, XxY",
+                                 default="10x10")
     ground.parse_args()
 
     patch = {}
     with open(ground.args.patch_file, "r") as patch_file:
         patch = {int(pix): loc for pix, loc in json.load(patch_file).items()}
     
-    nodes = NodeOutput(patch, ground.args.serial_port, ground.args.dest_addr)
-    
+    down_res = [int(val) for val in ground.args.downsample_res.split("x")]
+
+    nodes = NodeOutput(patch, ground.args.serial_port, ground.args.dest_addr, down_res)
+
     ground.register_frame_received(nodes.handle_frame)
     ground.wait_for_frames()
 
