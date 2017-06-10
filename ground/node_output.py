@@ -1,5 +1,6 @@
 from __future__ import print_function
 import json
+import socket
 import struct
 import sys
 import time
@@ -12,16 +13,24 @@ from ground_base import Frame, GroundBase
 class NodeOutput(object):
 
     NUM_NODES = 16
+    NODE_PORT = 17227  # DATE OF THE PARTY TO END ALL PARTIES
+    BROADCAST_IP = "192.168.0.255"
 
-    def __init__(self, patch, serial_name, ip_addr, down_res):
+    def __init__(self, patch, serial_name, down_res):
         self.patch = patch
+        self.node_struct = struct.Struct(">BBBB")
+        self.down_res = down_res
+
         if serial_name:
             self.serial = serial.Serial(serial_name)
             self.serial.open()
         else:
             self.serial = None
-        self.node_struct = struct.Struct(">BBBB")
-        self.down_res = down_res
+
+        self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.out_sock.bind(('', 0))
+        self.out_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        self.out_sock.connect(('<broadcast>', self.NODE_PORT)) 
 
     def __del__(self):
         if self.serial:
@@ -47,7 +56,7 @@ class NodeOutput(object):
             self.serial.write(packet)
 
     def send_packet_ip(self, packet):
-        pass
+        self.out_sock.send(packet)
 
     def reduce_image(self, frame, height, width):
         print("original", frame.height, frame.width)
@@ -96,7 +105,7 @@ class NodeOutput(object):
         packet = self.generate_packet(nodes)
         print("generated packet", type(packet))
         #self.send_packet_serial(packet)
-        #self.send_packet_ip(packet)
+        self.send_packet_ip(packet)
         print("<")
         #print([hex(ord(c)) for c in list(packet)])
         print([c for c in packet[:7]])
@@ -112,7 +121,8 @@ def main():
                                  help="Path to file with node patch",
                                  default="./node_patch.json")
     ground.argparse.add_argument("--serial_port",
-                                 help="Serial port to outpute path")
+                                 help="Serial port to outpute path",
+                                 default="")
     ground.argparse.add_argument("--downsample_res",
                                  help="Size to reduce image to before sending to nodes, XxY",
                                  default="10x10")
@@ -124,7 +134,7 @@ def main():
     
     down_res = [int(val) for val in ground.args.downsample_res.split("x")]
 
-    nodes = NodeOutput(patch, ground.args.serial_port, ground.args.dest_addr, down_res)
+    nodes = NodeOutput(patch, ground.args.serial_port, down_res)
 
     ground.register_frame_received(nodes.handle_frame)
     ground.wait_for_frames()
