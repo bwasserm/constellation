@@ -77,6 +77,7 @@ class GroundBase(object):
         self.out_sock = None
         self.dest_addr = None
         self.in_buffer = b''
+        self.out_counter = 0
         
         # Set up command line arguments
         self.argparse.add_argument('--dest_addr',
@@ -125,10 +126,11 @@ class GroundBase(object):
                 start = self.in_buffer.index(PACKET_HEADER)
                 if start > 0:
                     self.in_buffer = self.in_buffer[start:]
-                payload_size, = struct.unpack(">I", self.in_buffer[len(PACKET_HEADER):len(PACKET_HEADER)+4])
+                counter, payload_size, = struct.unpack(">II", self.in_buffer[len(PACKET_HEADER):len(PACKET_HEADER)+8])
                 # print("payload size", payload_size)
-                if len(PACKET_HEADER) + 4 + payload_size <= len(self.in_buffer):
-                    payload = self.in_buffer[len(PACKET_HEADER) + 4:len(PACKET_HEADER) + 4 + payload_size]
+                if len(PACKET_HEADER) + 8 + payload_size <= len(self.in_buffer):
+                    print("packet counter", counter)
+                    payload = self.in_buffer[len(PACKET_HEADER) + 8:len(PACKET_HEADER) + 8 + payload_size]
                     frame = Frame(serialized=payload)
                     if self.handler:
                         # print('handling frame')
@@ -136,7 +138,7 @@ class GroundBase(object):
                     else:
                         print("Got unhandled frame")
                         # print("Got unhandled frame {}".format(frame.width))
-                    self.in_buffer = self.in_buffer[len(PACKET_HEADER) + 4 + payload_size:]
+                    self.in_buffer = self.in_buffer[len(PACKET_HEADER) + 8 + payload_size:]
             except ValueError as err:  # haven't gotten new packet header
                 pass # print(err)
         
@@ -144,7 +146,8 @@ class GroundBase(object):
         serialized = frame.serialize()
         if serialized:
             try:
-                packet = PACKET_HEADER + struct.pack(">I", len(serialized)) + serialized
+                packet = PACKET_HEADER + struct.pack(">II", self.out_counter, len(serialized)) + serialized
+                self.out_counter += 1
                 print("Outgoing packet len: {}".format(len(packet)))
                 CHUNK_SIZE = 4096
                 while len(packet):

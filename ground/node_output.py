@@ -11,7 +11,7 @@ from ground_base import Frame, GroundBase
 
 class NodeOutput(object):
 
-    NUM_NODES = 100
+    NUM_NODES = 16
 
     def __init__(self, patch, serial_name, ip_addr, down_res):
         self.patch = patch
@@ -52,19 +52,19 @@ class NodeOutput(object):
     def reduce_image(self, frame, height, width):
         print("original", frame.height, frame.width)
         im_matrix = frame.image.load()
-        for row in range(frame.height):
-            for col in range(frame.width):
-                print(["%x" % c for c in im_matrix[col, row]], end='')
-            print('')
+        #for row in range(frame.height):
+        #    for col in range(frame.width):
+        #        print(["%x" % c for c in im_matrix[col, row]], end='')
+        #    print('')
         frame.image = frame.image.resize((width, height), resample=Image.ANTIALIAS)
         frame.width = frame.image.width
         frame.height = frame.image.height
         print("smaller", frame.height, frame.width)
         im_matrix = frame.image.load()
-        for row in range(frame.image.height):
-            for col in range(frame.image.width):
-                print(["%x" % c for c in im_matrix[col, row]], end='')
-            print('')
+        #for row in range(frame.image.height):
+        #    for col in range(frame.image.width):
+        #        print(["%x" % c for c in im_matrix[col, row]], end='')
+        #    print('')
 
     def map_pixels(self, image):
         width = image.width
@@ -77,8 +77,8 @@ class NodeOutput(object):
         for node_id, relloc in self.patch.items():
             x = int(relloc[0] * (height-1))
             y = int(relloc[1] * (width-1))
-            print(node_id, relloc, x, y)
             nodes[node_id] = pixels[y, x]
+            print(node_id, relloc, x, y, nodes[node_id])
 
         return nodes
 
@@ -88,19 +88,22 @@ class NodeOutput(object):
 
         self.reduce_image(frame, self.down_res[0], self.down_res[1])
         im_matrix = frame.image.load()
-        for row in range(frame.image.height):
-            for col in range(frame.image.width):
-                print(["%x" % c for c in im_matrix[col, row]], end='')
-            print('')
+        #for row in range(frame.image.height):
+        #    for col in range(frame.image.width):
+        #        print(["%x" % c for c in im_matrix[col, row]], end='')
+        #    print('')
         nodes = self.map_pixels(frame.image)
         packet = self.generate_packet(nodes)
-        self.send_packet_serial(packet)
-        self.send_packet_ip(packet)
-        #print(["%x" % c for c in packet])
-        print([chr(c) for c in packet[:7]])
+        print("generated packet", type(packet))
+        #self.send_packet_serial(packet)
+        #self.send_packet_ip(packet)
+        print("<")
+        #print([hex(ord(c)) for c in list(packet)])
+        print([c for c in packet[:7]])
         for node in range(self.NUM_NODES):
-            print(["%x" % c for c in packet[(7+node*4):(7+(node+1)*4)]])
-        print([chr(c) for c in packet[-6:]])
+            print([hex(ord(c)) for c in packet[(7+node*4):(7+(node+1)*4)]])
+        print([c for c in packet[-6:]])
+        print(">")
 
 
 def main():

@@ -25,7 +25,7 @@ def main():
     while True:
         im.putpalette(palette)
         temp_im.paste(im)
-        frame = Frame(source="color_bars", width=width, height=height, image=temp_im)
+        frame = Frame(source="gif:{}".format(file_path), width=width, height=height, image=temp_im)
         print(pixels)
         ground.send_frame(frame)
         time.sleep(frame_delay)
