@@ -8,7 +8,7 @@ import time
 from PIL import Image
 import serial
 
-from ground_base import Frame, GroundBase
+from ground_base import Frame, GroundBase, PY3
 
 class NodeOutput(object):
 
@@ -108,10 +108,16 @@ class NodeOutput(object):
         self.send_packet_ip(packet)
         print("<")
         #print([hex(ord(c)) for c in list(packet)])
-        print([c for c in packet[:7]])
-        for node in range(self.NUM_NODES):
-            print([hex(ord(c)) for c in packet[(7+node*4):(7+(node+1)*4)]])
-        print([c for c in packet[-6:]])
+        if PY3:
+            print([chr(c) for c in packet[:7]])
+            for node in range(self.NUM_NODES):
+                print([hex(c) for c in packet[(7+node*4):(7+(node+1)*4)]])
+            print([chr(c) for c in packet[-6:]])
+        else:
+            print([c for c in packet[:7]])
+            for node in range(self.NUM_NODES):
+                print([hex(ord(c)) for c in packet[(7+node*4):(7+(node+1)*4)]])
+            print([c for c in packet[-6:]])
         print(">")
 
 
