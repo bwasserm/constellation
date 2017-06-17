@@ -33,17 +33,34 @@ const int NODE_PORT = 17227;  // DATE OF THE PARTY TO END ALL PARTIES
 
 // Constellation packet constants
 #define MAX_NUM_NODES 16
-#define HEADER "CONSTEL"
-#define HEADER_SIZE strlen(HEADER)
-#define FOOTER "LATION"
-#define FOOTER_SIZE strlen(FOOTER)
+#define HEADER_SIZE 7
+char HEADER[HEADER_SIZE] = {'C', 'O', 'N', 'S', 'T', 'E', 'L'};
+#define FOOTER_SIZE 6
+char FOOTER[FOOTER_SIZE] = {'L', 'A', 'T', 'I', 'O', 'N'};
 // Packet = CONSTEL[pixels:rgb]LATION
 #define PACKET_LEN ((HEADER_SIZE) + 4 * (MAX_NUM_NODES) + FOOTER_SIZE)
 #define BUFFER_SIZE (2 * (PACKET_LEN))
 #define RED_OFFSET 0
 #define GREEN_OFFSET 1
 #define BLUE_OFFSET 2
-#define IGNITER_OFFSET 4
+#define ALPHA_OFFSET 3
+
+#define APPLY_GAMMA 1
+#define LEDS_PER_NODE 2
+
+#define DEBUG_LED 1
+
+char BOOM3[4] = {'I', '\'', 'm', 'S'};
+char BOOM2[4] = {'o', 'r', 'r', 'y'};
+char BOOM1[4] = {'D', 'a', 'v', 'e'};
+// I'm afraid I can't do that
+#define BOOM_PIN 2
+#define SAFE 3
+#define UNSAFE 2
+#define ARMED 1
+#define BOOM 0
+
+char boom_state = SAFE;
 
 byte neopix_gamma[] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -64,12 +81,13 @@ byte neopix_gamma[] = {
   215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255 };
 
 // UPDATE ME FOR EACH NODE
-#define NODE_INDEX 0
+#define NODE_INDEX 1
 #define PIXEL_OFFSET ((HEADER_SIZE) + 4 * (NODE_INDEX))
 
 // RF Module setup
+#ifdef RF
 SoftwareSerial radio(2, 3); // RX, TX  NO LONGER TRUE, USES SPI INSTEAD
-
+#endif
 
 // Num pixels, pin, pixel type
 Adafruit_NeoPixel led = Adafruit_NeoPixel(2, LED_PIN, NEO_GRB + NEO_KHZ800);
@@ -78,35 +96,24 @@ WiFiUDP Udp;
 char buffer[BUFFER_SIZE];
 int buf_index = 0;
 
-void setup() {
-  radio.begin(RF_BAUD_RATE);
-  led.begin();
-  led.show();
+typedef struct led_t{
+  char red;
+  char green;
+  char blue;
+  char alpha;
+} led_t;
 
-  memset(buffer, 0, BUFFER_SIZE);
-
-  WiFi.begin(ssid, password);
-
-  #ifdef WIFI
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-  }
-  Udp.begin(NODE_PORT);
-  #endif
-}
-
-void loop() {
-
-  #ifdef RF
+int read_buffer(led_t* setpoint){
+    #ifdef RF
   // Read packets in off the radio
   while(radio.available()){
     buffer[buf_index] = radio.read();
     buf_index += 1;
     if(buf_index >= BUFFER_SIZE){
-    	buf_index = 0;
+      buf_index = 0;
     }
     if(buf_index > 1 && buffer[buf_index-2] == 'N'){
-    	break;
+      break;
     }
   }
   #endif
@@ -119,25 +126,151 @@ void loop() {
     if(buf_index >= BUFFER_SIZE){
       buf_index = 0;
     }
-    if(buf_index > 1 && buffer[buf_index-2] == 'N'){
+    if(buf_index > 1 && buffer[buf_index-1] == 'N'){
       break;
     }
   }
+  Serial.write(buf_index);
+  
   #endif
 
   // Find the packet in the buffer
   char *pkt = strstr(buffer, HEADER);
+  Serial.write("\nheader");
+  Serial.write(char(int(pkt)+100));
   char *footer = strstr(buffer, FOOTER);
+  Serial.write("\nfooter");
+  Serial.write(char(int(footer)+100));
   int payload_len = int(footer) - int(pkt);
+  Serial.write(payload_len);
+  
   // If a valid packet was received
   if(pkt != NULL && footer != NULL && payload_len == (PACKET_LEN - FOOTER_SIZE)){
-    char red = pkt[PIXEL_OFFSET + RED_OFFSET];
-    char green = pkt[PIXEL_OFFSET + GREEN_OFFSET];
-    char blue = pkt[PIXEL_OFFSET + BLUE_OFFSET];
-    // Set LED
-    led.setPixelColor(0, red, green, blue);
-    led.setPixelColor(1, red, green, blue);
-    led.show();
+    setpoint->red = pkt[PIXEL_OFFSET + RED_OFFSET];
+    setpoint->green = pkt[PIXEL_OFFSET + GREEN_OFFSET];
+    setpoint->blue = pkt[PIXEL_OFFSET + BLUE_OFFSET];
+    setpoint->alpha = pkt[PIXEL_OFFSET + ALPHA_OFFSET];
     buf_index = 0;
+    return 1; // Got packet
   }
+  else{
+    return 0; // No packet yet
+  }
+}
+
+void check_firing_code(char red, char green, char blue, char alpha){
+  if((boom_state == SAFE || boom_state == UNSAFE) &&
+      red == BOOM3[0] && green == BOOM3[1] &&
+      blue == BOOM3[2] && alpha == BOOM3[3]){
+        boom_state == UNSAFE;
+  }else if((boom_state == UNSAFE || boom_state == ARMED) &&
+      red == BOOM2[0] && green == BOOM2[1] &&
+      blue == BOOM2[2] && alpha == BOOM2[3]){
+        boom_state == ARMED;
+  }else if((boom_state == ARMED || boom_state == BOOM) &&
+      red == BOOM1[0] && green == BOOM1[1] &&
+      blue == BOOM1[2] && alpha == BOOM1[3]){
+        boom_state == BOOM;
+  }else{
+    boom_state = SAFE;
+  }
+}
+
+void set_leds(led_t setpoint){
+  char red = setpoint.red;
+  char green = setpoint.green;
+  char blue = setpoint.blue;
+  char alpha = setpoint.alpha;
+
+  set_leds(red, green, blue, alpha);
+}
+
+void set_leds(char red, char green, char blue, char alpha){
+
+  check_firing_code(red, green, blue, alpha);
+
+  if(boom_state == SAFE){
+    if(APPLY_GAMMA){
+      red = neopix_gamma[red];
+      green = neopix_gamma[green];
+      blue = neopix_gamma[blue];
+    }
+    for(char i=0; i < LEDS_PER_NODE; i++){
+      led.setPixelColor(i, red, green, blue);
+    }
+    led.show();
+  }
+
+  if(boom_state == BOOM){
+    digitalWrite(BOOM_PIN, 0);
+  }
+}
+
+int led_state = 0;
+
+void blink(){
+  digitalWrite(LED_BUILTIN, led_state);
+  led_state = !led_state;
+}
+
+void setup() {
+  pinMode(BOOM_PIN, OUTPUT);
+  digitalWrite(BOOM_PIN, HIGH);  // Active Low
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  Serial.begin(115200);
+  
+  led.begin();
+  led.show();
+
+  set_leds(128, 0, 0, 0);
+
+  memset(buffer, 0, BUFFER_SIZE);
+
+  IPAddress ip(192, 168, 0, NODE_INDEX);
+  IPAddress gateway(192, 168, 0, 1);
+  IPAddress subnet(255, 255, 255, 0);
+  //WiFi.config(ip, gateway, subnet);
+  WiFi.begin(ssid, password);
+
+  #ifdef WIFI
+  Serial.write("Connecting to wifi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(100);
+    blink();
+    set_leds(128, 0, 0, 0);
+    delay(400);
+    set_leds(255, 0, 0, 0);
+    blink();
+    Serial.write("Connecting to wifi...");
+  }
+  Serial.write("Connected to wifi");
+  Udp.begin(NODE_PORT);
+  #endif
+
+  blink();
+  delay(1000);
+  blink();
+  delay(1000);
+  blink();
+  delay(1000);
+  blink();
+  delay(1000);
+  blink();
+  delay(1000);
+  blink();
+}
+
+void loop() {
+
+    led_t setpoint;
+    set_leds(0, 128, 0, 0);
+    blink();
+    if(read_buffer(&setpoint)){
+      set_leds(0, 0, 128, 0);
+      blink();
+      // Set LED
+      set_leds(setpoint);
+    }
+    set_leds(0, 255, 0, 0);
 }
