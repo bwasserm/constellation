@@ -39,7 +39,7 @@ char HEADER[HEADER_SIZE] = {'C', 'O', 'N', 'S', 'T', 'E', 'L'};
 char FOOTER[FOOTER_SIZE] = {'L', 'A', 'T', 'I', 'O', 'N'};
 // Packet = CONSTEL[pixels:rgb]LATION
 #define PACKET_LEN ((HEADER_SIZE) + 4 * (MAX_NUM_NODES) + FOOTER_SIZE)
-#define BUFFER_SIZE (2 * (PACKET_LEN))
+#define BUFFER_SIZE (5 * (PACKET_LEN))
 #define RED_OFFSET 0
 #define GREEN_OFFSET 1
 #define BLUE_OFFSET 2
@@ -93,8 +93,9 @@ SoftwareSerial radio(2, 3); // RX, TX  NO LONGER TRUE, USES SPI INSTEAD
 Adafruit_NeoPixel led = Adafruit_NeoPixel(2, LED_PIN, NEO_GRB + NEO_KHZ800);
 WiFiUDP Udp;
   
-char buffer[BUFFER_SIZE];
+char myBuffer[BUFFER_SIZE];
 int buf_index = 0;
+int counter = 0;
 
 typedef struct led_t{
   char red;
@@ -120,37 +121,46 @@ int read_buffer(led_t* setpoint){
 
   #ifdef WIFI
   // Read packets from the UDP socket
-  while(Udp.parsePacket()){
-    Udp.read(&(buffer[buf_index]), 1);
-    buf_index += 1;
-    if(buf_index >= BUFFER_SIZE){
-      buf_index = 0;
-    }
-    if(buf_index > 1 && buffer[buf_index-1] == 'N'){
+  int myPacketSize = 0;
+  while(1) {
+    myPacketSize = Udp.parsePacket();
+    if(myPacketSize)
+    {
+      Serial.print("Received packet of size:");
+      Serial.println(myPacketSize);
+      
+      Udp.read(myBuffer, myPacketSize);
+      
+      Serial.print("Contents:");
+      Serial.println(myBuffer);
+      counter+=1;
+      Serial.print("Counter:");
+      Serial.println(counter);
       break;
+      }
     }
-  }
-  Serial.write(buf_index);
+  
   
   #endif
 
   // Find the packet in the buffer
-  char *pkt = strstr(buffer, HEADER);
-  Serial.write("\nheader");
-  Serial.write(char(int(pkt)+100));
-  char *footer = strstr(buffer, FOOTER);
-  Serial.write("\nfooter");
-  Serial.write(char(int(footer)+100));
-  int payload_len = int(footer) - int(pkt);
-  Serial.write(payload_len);
+  char *pkt = myBuffer;
+  /*
+  strstr(myBuffer, HEADER);
+  Serial.print("Header: " );
+  Serial.println(pkt);
+  Serial.print("Int of Packet: ");
+  Serial.println(int(pkt));
+  */
   
   // If a valid packet was received
-  if(pkt != NULL && footer != NULL && payload_len == (PACKET_LEN - FOOTER_SIZE)){
+  if(myPacketSize == PACKET_LEN){
     setpoint->red = pkt[PIXEL_OFFSET + RED_OFFSET];
     setpoint->green = pkt[PIXEL_OFFSET + GREEN_OFFSET];
     setpoint->blue = pkt[PIXEL_OFFSET + BLUE_OFFSET];
     setpoint->alpha = pkt[PIXEL_OFFSET + ALPHA_OFFSET];
     buf_index = 0;
+    Serial.println("Got Milk");
     return 1; // Got packet
   }
   else{
@@ -225,7 +235,7 @@ void setup() {
 
   set_leds(128, 0, 0, 0);
 
-  memset(buffer, 0, BUFFER_SIZE);
+  memset(myBuffer, 0, BUFFER_SIZE);
 
   IPAddress ip(192, 168, 0, NODE_INDEX);
   IPAddress gateway(192, 168, 0, 1);
@@ -264,13 +274,13 @@ void setup() {
 void loop() {
 
     led_t setpoint;
-    set_leds(0, 128, 0, 0);
+    //set_leds(0, 128, 0, 0);
     blink();
     if(read_buffer(&setpoint)){
-      set_leds(0, 0, 128, 0);
+      //set_leds(0, 0, 128, 0);
       blink();
       // Set LED
       set_leds(setpoint);
     }
-    set_leds(0, 255, 0, 0);
+    //set_leds(0, 255, 0, 0);
 }
