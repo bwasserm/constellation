@@ -5,41 +5,34 @@
   #include <avr/power.h>
 #endif
 
-/* ESP8266 Only code */
-#ifdef ESP8266
+#define NODE_INDEX 1
+#define MAX_NUM_NODES 16
 
+
+/* ESP8266 Only code */
 #include <ESP8266WiFi.h>
 
-const char* ssid     = "FortKnox";
-const char* password = "Golden.Finger.Golden.Finger";
+const char* ssid     = "Constellation";
+const char* password = "constellation";
 
 const int NODE_PORT = 17227;  // DATE OF THE PARTY TO END ALL PARTIES
 
 #define LED_PIN 2
 #define WIFI
-#endif /* End of ESP8266 Only code */
+
 
 #if defined (__AVR_ATtiny85__)
   if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
 #endif
 
-#ifndef WIFI
-  #define RF
-#endif
-
-#ifdef RF
-#define RF_BAUD_RATE 115200
-#endif
-
 // Constellation packet constants
-#define MAX_NUM_NODES 16
 #define HEADER_SIZE 7
 char HEADER[HEADER_SIZE] = {'C', 'O', 'N', 'S', 'T', 'E', 'L'};
 #define FOOTER_SIZE 6
 char FOOTER[FOOTER_SIZE] = {'L', 'A', 'T', 'I', 'O', 'N'};
+
 // Packet = CONSTEL[pixels:rgb]LATION
 #define PACKET_LEN ((HEADER_SIZE) + 4 * (MAX_NUM_NODES) + FOOTER_SIZE)
-#define BUFFER_SIZE (5 * (PACKET_LEN))
 #define RED_OFFSET 0
 #define GREEN_OFFSET 1
 #define BLUE_OFFSET 2
@@ -50,17 +43,15 @@ char FOOTER[FOOTER_SIZE] = {'L', 'A', 'T', 'I', 'O', 'N'};
 
 #define DEBUG_LED 1
 
-char BOOM3[4] = {'I', '\'', 'm', 'S'};
-char BOOM2[4] = {'o', 'r', 'r', 'y'};
-char BOOM1[4] = {'D', 'a', 'v', 'e'};
-// I'm afraid I can't do that
-#define BOOM_PIN 2
-#define SAFE 3
-#define UNSAFE 2
-#define ARMED 1
-#define BOOM 0
+char UNSAFE[4] = {'I', '\'', 'm', 'S'};
+char ARMED[4] = {'o', 'r', 'r', 'y'};
+char BOOM[4] = {'D', 'a', 'v', 'e'};
 
-char boom_state = SAFE;
+// I'm afraid I can't do that
+#define BOOM_PIN 0
+char SAFE[4];
+
+char *boom_state = SAFE;
 
 byte neopix_gamma[] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -80,20 +71,14 @@ byte neopix_gamma[] = {
   177,180,182,184,186,189,191,193,196,198,200,203,205,208,210,213,
   215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255 };
 
-// UPDATE ME FOR EACH NODE
-#define NODE_INDEX 1
 #define PIXEL_OFFSET ((HEADER_SIZE) + 4 * (NODE_INDEX))
-
-// RF Module setup
-#ifdef RF
-SoftwareSerial radio(2, 3); // RX, TX  NO LONGER TRUE, USES SPI INSTEAD
-#endif
 
 // Num pixels, pin, pixel type
 Adafruit_NeoPixel led = Adafruit_NeoPixel(2, LED_PIN, NEO_GRB + NEO_KHZ800);
 WiFiUDP Udp;
-  
-char myBuffer[BUFFER_SIZE];
+
+// Define my buffer. 
+char myBuffer[PACKET_LEN];
 int buf_index = 0;
 int counter = 0;
 
@@ -105,21 +90,6 @@ typedef struct led_t{
 } led_t;
 
 int read_buffer(led_t* setpoint){
-    #ifdef RF
-  // Read packets in off the radio
-  while(radio.available()){
-    buffer[buf_index] = radio.read();
-    buf_index += 1;
-    if(buf_index >= BUFFER_SIZE){
-      buf_index = 0;
-    }
-    if(buf_index > 1 && buffer[buf_index-2] == 'N'){
-      break;
-    }
-  }
-  #endif
-
-  #ifdef WIFI
   // Read packets from the UDP socket
   int myPacketSize = 0;
   while(1) {
@@ -137,50 +107,46 @@ int read_buffer(led_t* setpoint){
       Serial.print("Counter:");
       Serial.println(counter);
       break;
-      }
     }
-  
-  
-  #endif
+  }
 
-  // Find the packet in the buffer
+  // Get the packet 
   char *pkt = myBuffer;
-  /*
-  strstr(myBuffer, HEADER);
-  Serial.print("Header: " );
-  Serial.println(pkt);
-  Serial.print("Int of Packet: ");
-  Serial.println(int(pkt));
-  */
-  
+
   // If a valid packet was received
-  if(myPacketSize == PACKET_LEN){
+  if(myPacketSize == PACKET_LEN) {
     setpoint->red = pkt[PIXEL_OFFSET + RED_OFFSET];
     setpoint->green = pkt[PIXEL_OFFSET + GREEN_OFFSET];
     setpoint->blue = pkt[PIXEL_OFFSET + BLUE_OFFSET];
     setpoint->alpha = pkt[PIXEL_OFFSET + ALPHA_OFFSET];
     buf_index = 0;
-    Serial.println("Got Milk");
     return 1; // Got packet
-  }
-  else{
+  } else {
     return 0; // No packet yet
   }
 }
 
-void check_firing_code(char red, char green, char blue, char alpha){
+void check_firing_code(char red, char green, char blue, char alpha) {
   if((boom_state == SAFE || boom_state == UNSAFE) &&
-      red == BOOM3[0] && green == BOOM3[1] &&
-      blue == BOOM3[2] && alpha == BOOM3[3]){
-        boom_state == UNSAFE;
+      red == UNSAFE[0] && green == UNSAFE[1] &&
+      blue == UNSAFE[2] && alpha == UNSAFE[3]) {
+        boom_state = UNSAFE;
+
+        Serial.println("Got to UNSAFE");
   }else if((boom_state == UNSAFE || boom_state == ARMED) &&
-      red == BOOM2[0] && green == BOOM2[1] &&
-      blue == BOOM2[2] && alpha == BOOM2[3]){
-        boom_state == ARMED;
+      red == ARMED[0] && green == ARMED[1] &&
+      blue == ARMED[2] && alpha == ARMED[3]){
+        boom_state = ARMED;
+
+        Serial.println("Got to ARMED");
   }else if((boom_state == ARMED || boom_state == BOOM) &&
-      red == BOOM1[0] && green == BOOM1[1] &&
-      blue == BOOM1[2] && alpha == BOOM1[3]){
-        boom_state == BOOM;
+      red == BOOM[0] && green == BOOM[1] &&
+      blue == BOOM[2] && alpha == BOOM[3]){
+        boom_state = BOOM;
+        digitalWrite(BOOM_PIN, LOW);
+        delay(100);
+        digitalWrite(BOOM_PIN, HIGH);   
+        Serial.println("Got to BOOM");
   }else{
     boom_state = SAFE;
   }
@@ -198,7 +164,7 @@ void set_leds(led_t setpoint){
 void set_leds(char red, char green, char blue, char alpha){
 
   check_firing_code(red, green, blue, alpha);
-
+  
   if(boom_state == SAFE){
     if(APPLY_GAMMA){
       red = neopix_gamma[red];
@@ -216,8 +182,8 @@ void set_leds(char red, char green, char blue, char alpha){
   }
 }
 
+//Debugging blink function 
 int led_state = 0;
-
 void blink(){
   digitalWrite(LED_BUILTIN, led_state);
   led_state = !led_state;
@@ -235,54 +201,38 @@ void setup() {
 
   set_leds(128, 0, 0, 0);
 
-  memset(myBuffer, 0, BUFFER_SIZE);
+  memset(myBuffer, 0, PACKET_LEN);
 
   IPAddress ip(192, 168, 0, NODE_INDEX);
   IPAddress gateway(192, 168, 0, 1);
   IPAddress subnet(255, 255, 255, 0);
-  //WiFi.config(ip, gateway, subnet);
+  WiFi.config(ip, gateway, subnet);
   WiFi.begin(ssid, password);
 
   WiFi.setOutputPower(0);
 
-  #ifdef WIFI
+
   Serial.write("Connecting to wifi");
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
     blink();
-    set_leds(128, 0, 0, 0);
-    delay(400);
     set_leds(255, 0, 0, 0);
+    delay(400);
+    set_leds(0, 255, 0, 0);
     blink();
     Serial.write("Connecting to wifi...");
   }
   Serial.write("Connected to wifi");
+  set_leds(0, 0, 255, 0);
   Udp.begin(NODE_PORT);
-  #endif
 
-  blink();
-  delay(1000);
-  blink();
-  delay(1000);
-  blink();
-  delay(1000);
-  blink();
-  delay(1000);
-  blink();
-  delay(1000);
-  blink();
 }
 
 void loop() {
 
     led_t setpoint;
-    //set_leds(0, 128, 0, 0);
-    //blink();
     if(read_buffer(&setpoint)){
-      //set_leds(0, 0, 128, 0);
-      //blink();
       // Set LED
       set_leds(setpoint);
     }
-    //set_leds(0, 255, 0, 0);
 }
