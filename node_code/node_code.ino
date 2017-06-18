@@ -243,6 +243,8 @@ void setup() {
   //WiFi.config(ip, gateway, subnet);
   WiFi.begin(ssid, password);
 
+  WiFi.setOutputPower(0);
+
   #ifdef WIFI
   Serial.write("Connecting to wifi");
   while (WiFi.status() != WL_CONNECTED) {
@@ -275,10 +277,10 @@ void loop() {
 
     led_t setpoint;
     //set_leds(0, 128, 0, 0);
-    blink();
+    //blink();
     if(read_buffer(&setpoint)){
       //set_leds(0, 0, 128, 0);
-      blink();
+      //blink();
       // Set LED
       set_leds(setpoint);
     }
