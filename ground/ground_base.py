@@ -12,6 +12,7 @@ PY3 = sys.version_info[0] == 3
 MODE = "RGB"
 PACKET_HEADER = b"CONSTELLATION"
 
+#import node_output
 
 def _bytes(src, enc="UTF-8"):
     if PY3:
@@ -68,6 +69,10 @@ class Frame(object):
 
 class GroundBase(object):
 
+    NUM_NODES = 16
+    NODE_PORT = 17227  # DATE OF THE PARTY TO END ALL PARTIES
+    BROADCAST_IP = "192.168.0.255"
+
     def __init__(self):
         self.args = None
         self.argparse = argparse.ArgumentParser(description="Constellation ground module")
@@ -79,6 +84,11 @@ class GroundBase(object):
         self.in_buffer = b''
         self.out_counter = 0
         
+        self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.out_sock.bind(('', 0))
+        #self.out_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        #self.out_sock.connect(('<broadcast>', self.NODE_PORT)) 
+
         # Set up command line arguments
         self.argparse.add_argument('--dest_addr',
                                    help="Address to send frame packets to, if no host provided default localhost",
@@ -86,6 +96,9 @@ class GroundBase(object):
         self.argparse.add_argument('--listen_port', type=int,
                                    help="Port to listen for frame packets on",
                                    default=10002)
+
+        self.nodes = dict()
+        self.node_struct = struct.Struct(">BBBB")
         
     def parse_args(self):
         self.args = self.argparse.parse_args()
@@ -141,22 +154,78 @@ class GroundBase(object):
                     self.in_buffer = self.in_buffer[len(PACKET_HEADER) + 8 + payload_size:]
             except ValueError as err:  # haven't gotten new packet header
                 pass # print(err)
+
+    def _generate_packet(self, nodes):
+        HEADER = b"CONSTEL"
+        HEADER_SIZE = len(HEADER)
+        FOOTER = b"LATION"
+        packet = HEADER
+        for node_id in range(self.NUM_NODES):
+            if node_id in nodes:
+                r, g, b, a = nodes[node_id]
+                a = 255  # alpha channel
+                self.nodes[node_id] = nodes[node_id]
+            else:
+                # No new value for this node, use last value
+                r, g, b, a = self.nodes.get(node_id, (0, 0, 0, 0))
+            packet += self.node_struct.pack(r, g, b, a)
+        packet += FOOTER
+        return packet
+
+    def _send_packet_ip(self, packet):
+        #self.out_sock.send(packet)
+        for i in range (10):
+            self.out_sock.sendto(packet, ("192.168.0.%d" % i, self.NODE_PORT))
+
+    def _map_pixels(self, image):
+        width = image.width
+        height = image.height
+        nodes = {}
+
+        pixels = image.load()
+        #self.packet_index += 1
+        #r = 255 if (self.packet_index % 8 >= 4) else 0
+        #g = 255 if (self.packet_index % 4 >= 2) else 0
+        #b = 255 if self.packet_index % 2 else 0
+
+        # Map each node to a closes
+        for node_id, relloc in self.patch.items():
+            x = int(relloc[0] * (height-1))
+            y = int(relloc[1] * (width-1))
+            nodes[node_id] = pixels[y, x]
+            #nodes[node_id] = (r, g, b)
+            #print(node_id, relloc, x, y, nodes[node_id])
+
+        return nodes
+
+    def _reduce_image(self, frame, height, width):
+        print("original", frame.height, frame.width)
+        im_matrix = frame.image.load()
+        #for row in range(frame.height):
+        #    for col in range(frame.width):
+        #        print(["%x" % c for c in im_matrix[col, row]], end='')
+        #    print('')
+        frame.image = frame.image.resize((width, height), resample=Image.ANTIALIAS)
+        frame.width = frame.image.width
+        frame.height = frame.image.height
+        #print("smaller", frame.height, frame.width)
+        #im_matrix = frame.image.load()
+        #for row in range(frame.image.height):
+        #    for col in range(frame.image.width):
+        #        print(["%x" % c for c in im_matrix[col, row]], end='')
+        #    print('')
         
-    def send_frame(self, frame):
-        serialized = frame.serialize()
-        if serialized:
-            try:
-                packet = PACKET_HEADER + struct.pack(">II", self.out_counter, len(serialized)) + serialized
-                self.out_counter += 1
-                print("Outgoing packet len: {}".format(len(packet)))
-                CHUNK_SIZE = 4096
-                while len(packet):
-                    self.out_sock.sendto(packet[:CHUNK_SIZE], self.dest_addr)
-                    if len(packet) > CHUNK_SIZE:
-                        packet = packet[CHUNK_SIZE:]
-                    else:
-                        break
-            except socket.error as err:
-                print("Failed to send")
-                pass  # Destination no longer exists, fail silently
-                # print(err)
+    def set_nodes_frame(self, frame):
+        self._reduce_image(frame, 10, 10)
+        nodes = self._map_pixels(frame.image)
+        packet = self._generate_packet(nodes)
+        self._send_packet_ip(packet)
+
+    def set_nodes(self, nodes):
+        """ Write values out to the nodes
+
+        Args:
+            nodes: A dict of node IDs: tuple of (r, g, b, a)
+        """
+        packet = self._generate_packet(nodes)
+        self._send_packet_ip(packet)

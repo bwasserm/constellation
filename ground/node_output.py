@@ -16,10 +16,11 @@ class NodeOutput(object):
     NODE_PORT = 17227  # DATE OF THE PARTY TO END ALL PARTIES
     BROADCAST_IP = "192.168.0.255"
 
-    def __init__(self, patch, serial_name, down_res):
+    def __init__(self): #, patch, serial_name, down_res):
         self.patch = patch
         self.node_struct = struct.Struct(">BBBB")
         self.down_res = down_res
+        self.nodes = dict()
 
         if serial_name:
             self.serial = serial.Serial(serial_name)
@@ -45,10 +46,12 @@ class NodeOutput(object):
         packet = HEADER
         for node_id in range(self.NUM_NODES):
             if node_id in nodes:
-                r, g, b = nodes[node_id]
-                a = 0  # alpha channel
+                r, g, b, a = nodes[node_id]
+                a = 255  # alpha channel
+                self.nodes[node_id] = nodes[node_id]
             else:
-                r, g, b, a = 0, 0, 0, 0
+                # No new value for this node, use last value
+                r, g, b, a = self.nodes[node_id]
             packet += self.node_struct.pack(r, g, b, a)
         packet += FOOTER
         return packet

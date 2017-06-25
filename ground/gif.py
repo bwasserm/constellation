@@ -26,8 +26,8 @@ def main():
         im.putpalette(palette)
         temp_im.paste(im)
         frame = Frame(source="gif:{}".format(file_path), width=width, height=height, image=temp_im)
-        print(pixels)
-        ground.send_frame(frame)
+        #print(pixels)
+        ground.set_nodes_frame(frame)
         time.sleep(frame_delay)
         try:
             im.seek(im.tell() + 1)
