@@ -4,7 +4,7 @@ import time
 
 from PIL import Image
 
-from ground_base import Frame, GroundBase
+from ground_base import GroundBase
 
 def main():
     ground = GroundBase()
