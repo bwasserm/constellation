@@ -11,7 +11,7 @@ def set_color(_id):
     balloons = [0, 1, 3, 2]
     for n in [1, 2, 3]:
         if n == _id:
-            codes[balloons[n]] = (255, 255, 0, 0)
+            codes[balloons[n]] = (0, 255, 0, 0)
         else:
             codes[balloons[n]] = (255, 0, 255, 0)
     return codes
