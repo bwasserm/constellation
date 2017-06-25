@@ -29,8 +29,10 @@ class NodeOutput(object):
 
         self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.out_sock.bind(('', 0))
-        self.out_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        self.out_sock.connect(('<broadcast>', self.NODE_PORT)) 
+        #self.out_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        #self.out_sock.connect(('<broadcast>', self.NODE_PORT)) 
+
+        self.packet_index = 0
 
     def __del__(self):
         if self.serial:
@@ -56,7 +58,9 @@ class NodeOutput(object):
             self.serial.write(packet)
 
     def send_packet_ip(self, packet):
-        self.out_sock.send(packet)
+        #self.out_sock.send(packet)
+        for i in range (10):
+            self.out_sock.sendto(packet, ("192.168.0.%d" % i, self.NODE_PORT))
 
     def reduce_image(self, frame, height, width):
         print("original", frame.height, frame.width)
@@ -68,8 +72,8 @@ class NodeOutput(object):
         frame.image = frame.image.resize((width, height), resample=Image.ANTIALIAS)
         frame.width = frame.image.width
         frame.height = frame.image.height
-        print("smaller", frame.height, frame.width)
-        im_matrix = frame.image.load()
+        #print("smaller", frame.height, frame.width)
+        #im_matrix = frame.image.load()
         #for row in range(frame.image.height):
         #    for col in range(frame.image.width):
         #        print(["%x" % c for c in im_matrix[col, row]], end='')
@@ -81,13 +85,18 @@ class NodeOutput(object):
         nodes = {}
 
         pixels = image.load()
+        self.packet_index += 1
+        r = 255 if (self.packet_index % 8 >= 4) else 0
+        g = 255 if (self.packet_index % 4 >= 2) else 0
+        b = 255 if self.packet_index % 2 else 0
 
         # Map each node to a closes
         for node_id, relloc in self.patch.items():
-            x = int(relloc[0] * (height-1))
-            y = int(relloc[1] * (width-1))
-            nodes[node_id] = pixels[y, x]
-            print(node_id, relloc, x, y, nodes[node_id])
+            #x = int(relloc[0] * (height-1))
+            #y = int(relloc[1] * (width-1))
+            #nodes[node_id] = pixels[y, x]
+            nodes[node_id] = (r, g, b)
+            #print(node_id, relloc, x, y, nodes[node_id])
 
         return nodes
 
@@ -95,7 +104,7 @@ class NodeOutput(object):
         print("we got one", frame.source, frame.image.size)
         im = frame.image.load()
 
-        self.reduce_image(frame, self.down_res[0], self.down_res[1])
+        #self.reduce_image(frame, self.down_res[0], self.down_res[1])
         im_matrix = frame.image.load()
         #for row in range(frame.image.height):
         #    for col in range(frame.image.width):
@@ -103,22 +112,22 @@ class NodeOutput(object):
         #    print('')
         nodes = self.map_pixels(frame.image)
         packet = self.generate_packet(nodes)
-        print("generated packet", type(packet))
+        # print("generated packet", type(packet))
         #self.send_packet_serial(packet)
         self.send_packet_ip(packet)
-        print("<")
-        #print([hex(ord(c)) for c in list(packet)])
-        if PY3:
-            print([chr(c) for c in packet[:7]])
-            for node in range(self.NUM_NODES):
-                print([hex(c) for c in packet[(7+node*4):(7+(node+1)*4)]])
-            print([chr(c) for c in packet[-6:]])
-        else:
-            print([c for c in packet[:7]])
-            for node in range(self.NUM_NODES):
-                print([hex(ord(c)) for c in packet[(7+node*4):(7+(node+1)*4)]])
-            print([c for c in packet[-6:]])
-        print(">")
+        # print("<")
+        # #print([hex(ord(c)) for c in list(packet)])
+        # if PY3:
+        #     print([chr(c) for c in packet[:7]])
+        #     for node in range(self.NUM_NODES):
+        #         print([hex(c) for c in packet[(7+node*4):(7+(node+1)*4)]])
+        #     print([chr(c) for c in packet[-6:]])
+        # else:
+        #     print([c for c in packet[:7]])
+        #     for node in range(self.NUM_NODES):
+        #         print([hex(ord(c)) for c in packet[(7+node*4):(7+(node+1)*4)]])
+        #     print([c for c in packet[-6:]])
+        # print(">")
 
 
 def main():

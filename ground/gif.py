@@ -20,7 +20,7 @@ def main():
     try:  # per the docs, duration may not be present
         frame_delay = im.info.duration / 1000  # value is in ms
     except AttributeError:
-        frame_delay = 1
+        frame_delay = 0.1
     temp_im = Image.new("RGB", im.size)
     while True:
         im.putpalette(palette)
