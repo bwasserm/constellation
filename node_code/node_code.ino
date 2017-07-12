@@ -1,16 +1,19 @@
 #include <SoftwareSerial.h>
 #include <Adafruit_NeoPixel.h>
-#include <WiFiUdp.h>
+// #include <WiFiUdp.h>
+#include <ESP8266WiFi.h>
+#include "E131/E131.h"
+
 #ifdef __AVR__
   #include <avr/power.h>
 #endif
 
 #define NODE_INDEX 1
 #define MAX_NUM_NODES 16
+#define UNIVERSE 1
 
 
 /* ESP8266 Only code */
-#include <ESP8266WiFi.h>
 
 const char* ssid     = "Constellation";
 const char* password = "constellation";
@@ -31,8 +34,6 @@ char HEADER[HEADER_SIZE] = {'C', 'O', 'N', 'S', 'T', 'E', 'L'};
 #define FOOTER_SIZE 6
 char FOOTER[FOOTER_SIZE] = {'L', 'A', 'T', 'I', 'O', 'N'};
 
-// Packet = CONSTEL[pixels:rgb]LATION
-#define PACKET_LEN ((HEADER_SIZE) + 4 * (MAX_NUM_NODES) + FOOTER_SIZE)
 #define RED_OFFSET 0
 #define GREEN_OFFSET 1
 #define BLUE_OFFSET 2
@@ -71,16 +72,11 @@ byte neopix_gamma[] = {
   177,180,182,184,186,189,191,193,196,198,200,203,205,208,210,213,
   215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255 };
 
-#define PIXEL_OFFSET ((HEADER_SIZE) + 4 * (NODE_INDEX))
+#define PIXEL_OFFSET (4 * (NODE_INDEX))
 
 // Num pixels, pin, pixel type
 Adafruit_NeoPixel led = Adafruit_NeoPixel(2, LED_PIN, NEO_GRB + NEO_KHZ800);
-WiFiUDP Udp;
-
-// Define my buffer. 
-char myBuffer[PACKET_LEN];
-int buf_index = 0;
-int counter = 0;
+E131 e131;
 
 typedef struct led_t{
   char red;
@@ -88,43 +84,6 @@ typedef struct led_t{
   char blue;
   char alpha;
 } led_t;
-
-int read_buffer(led_t* setpoint){
-  // Read packets from the UDP socket
-  int myPacketSize = 0;
-  while(1) {
-    myPacketSize = Udp.parsePacket();
-    if(myPacketSize)
-    {
-      Serial.print("Received packet of size:");
-      Serial.println(myPacketSize);
-      
-      Udp.read(myBuffer, myPacketSize);
-      
-      Serial.print("Contents:");
-      Serial.println(myBuffer);
-      counter+=1;
-      Serial.print("Counter:");
-      Serial.println(counter);
-      break;
-    }
-  }
-
-  // Get the packet 
-  char *pkt = myBuffer;
-
-  // If a valid packet was received
-  if(myPacketSize == PACKET_LEN) {
-    setpoint->red = pkt[PIXEL_OFFSET + RED_OFFSET];
-    setpoint->green = pkt[PIXEL_OFFSET + GREEN_OFFSET];
-    setpoint->blue = pkt[PIXEL_OFFSET + BLUE_OFFSET];
-    setpoint->alpha = pkt[PIXEL_OFFSET + ALPHA_OFFSET];
-    buf_index = 0;
-    return 1; // Got packet
-  } else {
-    return 0; // No packet yet
-  }
-}
 
 void check_firing_code(char red, char green, char blue, char alpha) {
   if((boom_state == SAFE || boom_state == UNSAFE) &&
@@ -201,16 +160,9 @@ void setup() {
 
   set_leds(128, 0, 0, 0);
 
-  memset(myBuffer, 0, PACKET_LEN);
-
-  IPAddress ip(192, 168, 0, NODE_INDEX);
-  IPAddress gateway(192, 168, 0, 1);
-  IPAddress subnet(255, 255, 255, 0);
-  WiFi.config(ip, gateway, subnet);
-  WiFi.begin(ssid, password);
+  e131.beginMulticast(ssid, password, 1);  /* via Multicast for Universe 1 */
 
   WiFi.setOutputPower(0);
-
 
   Serial.write("Connecting to wifi");
   while (WiFi.status() != WL_CONNECTED) {
@@ -224,15 +176,18 @@ void setup() {
   }
   Serial.write("Connected to wifi");
   set_leds(0, 0, 255, 0);
-  Udp.begin(NODE_PORT);
 
 }
 
 void loop() {
 
-    led_t setpoint;
-    if(read_buffer(&setpoint)){
-      // Set LED
-      set_leds(setpoint);
+    /* Parse a packet and update pixels */
+    if(e131.parsePacket()) {
+        if (e131.universe == UNIVERSE) {
+            set_leds(e131.data[PIXEL_OFFSET + RED_OFFSET],
+                     e131.data[PIXEL_OFFSET + GREEN_OFFSET],
+                     e131.data[PIXEL_OFFSET + BLUE_OFFSET],
+                     e131.data[PIXEL_OFFSET + ALPHA_OFFSET]);
+        }
     }
 }

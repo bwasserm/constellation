@@ -5,6 +5,8 @@ import struct
 import sys
 import time
 
+from lumos import DMXSource
+
 from PIL import Image
 
 PY3 = sys.version_info[0] == 3
@@ -69,9 +71,7 @@ class Frame(object):
 
 class GroundBase(object):
 
-    NUM_NODES = 16
-    NODE_PORT = 17227  # DATE OF THE PARTY TO END ALL PARTIES
-    BROADCAST_IP = "192.168.0.255"
+    NUM_NODES = 255
 
     def __init__(self):
         self.args = None
@@ -83,9 +83,11 @@ class GroundBase(object):
         self.dest_addr = None
         self.in_buffer = b''
         self.out_counter = 0
+
+        self.source = DMXSource(universe=1, bind_ip="192.168.0.2")
         
-        self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.out_sock.bind(('', 0))
+        #self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #self.out_sock.bind(('', 0))
         #self.out_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         #self.out_sock.connect(('<broadcast>', self.NODE_PORT)) 
 
@@ -156,26 +158,18 @@ class GroundBase(object):
                 pass # print(err)
 
     def _generate_packet(self, nodes):
-        HEADER = b"CONSTEL"
-        HEADER_SIZE = len(HEADER)
-        FOOTER = b"LATION"
-        packet = HEADER
         for node_id in range(self.NUM_NODES):
             if node_id in nodes:
                 r, g, b, a = nodes[node_id]
-                a = 255  # alpha channel
                 self.nodes[node_id] = nodes[node_id]
             else:
                 # No new value for this node, use last value
                 r, g, b, a = self.nodes.get(node_id, (0, 0, 0, 0))
-            packet += self.node_struct.pack(r, g, b, a)
-        packet += FOOTER
+            packet += [r, g, b, a]
         return packet
 
     def _send_packet_ip(self, packet):
-        #self.out_sock.send(packet)
-        for i in range (10):
-            self.out_sock.sendto(packet, ("192.168.0.%d" % i, self.NODE_PORT))
+        self.source.send_data(packet)
 
     def _map_pixels(self, image):
         width = image.width
