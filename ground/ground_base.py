@@ -163,7 +163,6 @@ class GroundBase(object):
         for node_id in range(self.NUM_NODES):
             if node_id in nodes:
                 r, g, b, a = nodes[node_id]
-                a = 255  # alpha channel
                 self.nodes[node_id] = nodes[node_id]
             else:
                 # No new value for this node, use last value
