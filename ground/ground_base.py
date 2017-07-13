@@ -84,7 +84,7 @@ class GroundBase(object):
         self.in_buffer = b''
         self.out_counter = 0
 
-        self.source = DMXSource(universe=1, bind_ip="192.168.0.2")
+        self.source = DMXSource(universe=1, bind_ip="192.168.0.199")
         
         #self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #self.out_sock.bind(('', 0))

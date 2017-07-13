@@ -2,5 +2,5 @@
 	path = ground/Lumos
 	url = https://github.com/ptone/Lumos.git
 [submodule "node_code/E131"]
-	path = node_code/E131
+	path = node_code/libraries/E131
 	url = https://github.com/forkineye/E131.git

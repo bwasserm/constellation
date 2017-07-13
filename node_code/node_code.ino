@@ -1,55 +1,34 @@
-#include <SoftwareSerial.h>
-#include <Adafruit_NeoPixel.h>
-// #include <WiFiUdp.h>
 #include <ESP8266WiFi.h>
-#include "E131/E131.h"
+#include <ESPAsyncUDP.h>
+#include <E131.h>
+#include <Adafruit_NeoPixel.h>
 
-#ifdef __AVR__
-  #include <avr/power.h>
-#endif
-
-#define NODE_INDEX 1
-#define MAX_NUM_NODES 16
+#define NODE_INDEX 9
+#define MAX_NUM_NODES 100
 #define UNIVERSE 1
-
-
-/* ESP8266 Only code */
+#define PIXEL_OFFSET (4 * (NODE_INDEX))
 
 const char* ssid     = "Constellation";
 const char* password = "constellation";
 
-const int NODE_PORT = 17227;  // DATE OF THE PARTY TO END ALL PARTIES
-
-#define LED_PIN 2
-#define WIFI
-
-
-#if defined (__AVR_ATtiny85__)
-  if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
-#endif
-
-// Constellation packet constants
-#define HEADER_SIZE 7
-char HEADER[HEADER_SIZE] = {'C', 'O', 'N', 'S', 'T', 'E', 'L'};
-#define FOOTER_SIZE 6
-char FOOTER[FOOTER_SIZE] = {'L', 'A', 'T', 'I', 'O', 'N'};
-
-#define RED_OFFSET 0
-#define GREEN_OFFSET 1
-#define BLUE_OFFSET 2
-#define ALPHA_OFFSET 3
+#define BOOM_PIN 2
+#define LED_PIN 0
 
 #define APPLY_GAMMA 1
 #define LEDS_PER_NODE 2
 
 #define DEBUG_LED 1
 
+#define RED_OFFSET 0
+#define GREEN_OFFSET 1
+#define BLUE_OFFSET 2
+#define ALPHA_OFFSET 3
+
 char UNSAFE[4] = {'I', '\'', 'm', 'S'};
 char ARMED[4] = {'o', 'r', 'r', 'y'};
 char BOOM[4] = {'D', 'a', 'v', 'e'};
 
 // I'm afraid I can't do that
-#define BOOM_PIN 0
 char SAFE[4];
 
 char *boom_state = SAFE;
@@ -72,11 +51,10 @@ byte neopix_gamma[] = {
   177,180,182,184,186,189,191,193,196,198,200,203,205,208,210,213,
   215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255 };
 
-#define PIXEL_OFFSET (4 * (NODE_INDEX))
+E131 e131;
 
 // Num pixels, pin, pixel type
 Adafruit_NeoPixel led = Adafruit_NeoPixel(2, LED_PIN, NEO_GRB + NEO_KHZ800);
-E131 e131;
 
 typedef struct led_t{
   char red;
@@ -102,22 +80,13 @@ void check_firing_code(char red, char green, char blue, char alpha) {
       red == BOOM[0] && green == BOOM[1] &&
       blue == BOOM[2] && alpha == BOOM[3]){
         boom_state = BOOM;
-        digitalWrite(BOOM_PIN, LOW);
-        delay(100);
-        digitalWrite(BOOM_PIN, HIGH);   
+        digitalWrite(BOOM_PIN, HIGH);
+        delay(1000);
+        digitalWrite(BOOM_PIN, LOW);   
         Serial.println("Got to BOOM");
   }else{
     boom_state = SAFE;
   }
-}
-
-void set_leds(led_t setpoint){
-  char red = setpoint.red;
-  char green = setpoint.green;
-  char blue = setpoint.blue;
-  char alpha = setpoint.alpha;
-
-  set_leds(red, green, blue, alpha);
 }
 
 void set_leds(char red, char green, char blue, char alpha){
@@ -135,12 +104,16 @@ void set_leds(char red, char green, char blue, char alpha){
     }
     led.show();
   }
-
-  if(boom_state == BOOM){
-    digitalWrite(BOOM_PIN, 0);
-  }
 }
 
+void set_leds(led_t setpoint){
+  char red = setpoint.red;
+  char green = setpoint.green;
+  char blue = setpoint.blue;
+  char alpha = setpoint.alpha;
+
+  set_leds(red, green, blue, alpha);
+}
 //Debugging blink function 
 int led_state = 0;
 void blink(){
@@ -150,7 +123,7 @@ void blink(){
 
 void setup() {
   pinMode(BOOM_PIN, OUTPUT);
-  digitalWrite(BOOM_PIN, HIGH);  // Active Low
+  digitalWrite(BOOM_PIN, LOW);  // Active High
   pinMode(LED_BUILTIN, OUTPUT);
 
   Serial.begin(115200);
@@ -191,3 +164,4 @@ void loop() {
         }
     }
 }
+
