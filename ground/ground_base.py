@@ -71,7 +71,7 @@ class Frame(object):
 
 class GroundBase(object):
 
-    NUM_NODES = 255
+    NUM_NODES = 100
 
     def __init__(self):
         self.args = None
@@ -84,7 +84,8 @@ class GroundBase(object):
         self.in_buffer = b''
         self.out_counter = 0
 
-        self.source = DMXSource(universe=1, bind_ip="192.168.0.199")
+        #self.source = DMXSource(universe=1, bind_ip="192.168.0.199")
+        self.source = DMXSource(universe=1, bind_ip="192.168.1.115")
         
         #self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         #self.out_sock.bind(('', 0))
@@ -100,6 +101,7 @@ class GroundBase(object):
                                    default=10002)
 
         self.nodes = dict()
+        self.sacn_frame = [0] * (4 * self.NUM_NODES)
         self.node_struct = struct.Struct(">BBBB")
         
     def parse_args(self):
@@ -160,13 +162,13 @@ class GroundBase(object):
     def _generate_packet(self, nodes):
         for node_id in range(self.NUM_NODES):
             if node_id in nodes:
-                r, g, b, a = nodes[node_id]
-                self.nodes[node_id] = nodes[node_id]
+                r, g, b, a = [int(x) for x in nodes[node_id]]
+                self.nodes[node_id] = (r, g, b, a)
             else:
                 # No new value for this node, use last value
                 r, g, b, a = self.nodes.get(node_id, (0, 0, 0, 0))
-            packet += [r, g, b, a]
-        return packet
+            self.sacn_frame[node_id*4:node_id*4+4] = [r, g, b, a]
+        return self.sacn_frame
 
     def _send_packet_ip(self, packet):
         self.source.send_data(packet)
