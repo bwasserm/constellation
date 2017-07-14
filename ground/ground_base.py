@@ -86,11 +86,6 @@ class GroundBase(object):
 
         #self.source = DMXSource(universe=1, bind_ip="192.168.0.199")
         self.source = DMXSource(universe=1, bind_ip="192.168.1.115")
-        
-        #self.out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        #self.out_sock.bind(('', 0))
-        #self.out_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        #self.out_sock.connect(('<broadcast>', self.NODE_PORT)) 
 
         # Set up command line arguments
         self.argparse.add_argument('--dest_addr',
@@ -102,7 +97,6 @@ class GroundBase(object):
 
         self.nodes = dict()
         self.sacn_frame = [0] * (4 * self.NUM_NODES)
-        self.node_struct = struct.Struct(">BBBB")
         
     def parse_args(self):
         self.args = self.argparse.parse_args()
@@ -139,25 +133,21 @@ class GroundBase(object):
                 continue
             self.in_buffer += data
             try:
-                #print("buffer size", len(self.in_buffer))
                 start = self.in_buffer.index(PACKET_HEADER)
                 if start > 0:
                     self.in_buffer = self.in_buffer[start:]
                 counter, payload_size, = struct.unpack(">II", self.in_buffer[len(PACKET_HEADER):len(PACKET_HEADER)+8])
-                # print("payload size", payload_size)
                 if len(PACKET_HEADER) + 8 + payload_size <= len(self.in_buffer):
                     print("packet counter", counter)
                     payload = self.in_buffer[len(PACKET_HEADER) + 8:len(PACKET_HEADER) + 8 + payload_size]
                     frame = Frame(serialized=payload)
                     if self.handler:
-                        # print('handling frame')
                         self.handler(frame)
                     else:
                         print("Got unhandled frame")
-                        # print("Got unhandled frame {}".format(frame.width))
                     self.in_buffer = self.in_buffer[len(PACKET_HEADER) + 8 + payload_size:]
             except ValueError as err:  # haven't gotten new packet header
-                pass # print(err)
+                pass
 
     def _generate_packet(self, nodes):
         for node_id in range(self.NUM_NODES):
@@ -179,18 +169,12 @@ class GroundBase(object):
         nodes = {}
 
         pixels = image.load()
-        #self.packet_index += 1
-        #r = 255 if (self.packet_index % 8 >= 4) else 0
-        #g = 255 if (self.packet_index % 4 >= 2) else 0
-        #b = 255 if self.packet_index % 2 else 0
 
         # Map each node to a closes
         for node_id, relloc in self.patch.items():
             x = int(relloc[0] * (height-1))
             y = int(relloc[1] * (width-1))
             nodes[node_id] = pixels[y, x]
-            #nodes[node_id] = (r, g, b)
-            #print(node_id, relloc, x, y, nodes[node_id])
 
         return nodes
 
