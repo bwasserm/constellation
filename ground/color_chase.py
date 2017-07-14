@@ -23,8 +23,8 @@ def main():
         # Map each node to a closes
         for node_id in range(6):
             nodes[node_id] = (r, g, b, a)
-            ground.set_nodes(nodes)
-            time.sleep(frame_delay)
+        ground.set_nodes(nodes)
+        time.sleep(frame_delay)
 
 if __name__ == '__main__':
     main()

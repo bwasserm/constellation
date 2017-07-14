@@ -23,10 +23,10 @@ def main():
         degrees += 1
 
         # Map each node to a closes
-        for node_id in [1, 3, 2, 4]:
+        for node_id in range(ground.NUM_NODES):
             nodes[node_id] = color(degrees + node_id * 15)
-            ground.set_nodes(nodes)
-            time.sleep(frame_delay)
+        ground.set_nodes(nodes)
+        time.sleep(frame_delay)
 
 if __name__ == '__main__':
     main()

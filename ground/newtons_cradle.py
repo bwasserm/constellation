@@ -23,10 +23,10 @@ def cradle():
     while True:
         for x in range(1, 4):
             ground.set_nodes(set_color(x))
-            time.sleep(delay)
+        time.sleep(delay)
         for x in range(3, 1, -1):
             ground.set_nodes(set_color(x))
-            time.sleep(delay)
+        time.sleep(delay)
 
 if __name__ == '__main__':
     cradle()
