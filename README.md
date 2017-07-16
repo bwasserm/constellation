@@ -36,3 +36,7 @@ Run any of the python scripts in ground/ (other than ground_base.py) and they sh
 * Q Light Controller+: http://www.qlcplus.org/features.html
 ** show stored in ground/qlcp_constellation.qxw
 ** Easy to use, console of choice so far
+
+
+** Building node code
+Follow the instructions for "Installing Git Version": https://github.com/esp8266/Arduino#using-git-version
