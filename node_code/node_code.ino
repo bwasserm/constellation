@@ -94,15 +94,17 @@ void set_leds(char red, char green, char blue, char alpha){
   check_firing_code(red, green, blue, alpha);
   
   if(boom_state == SAFE){
-    if(APPLY_GAMMA){
-      red = neopix_gamma[red];
-      green = neopix_gamma[green];
-      blue = neopix_gamma[blue];
+    if(alpha == 255) {  // Ignore packets not indending to set this node
+      if(APPLY_GAMMA){
+        red = neopix_gamma[red];
+        green = neopix_gamma[green];
+        blue = neopix_gamma[blue];
+      }
+      for(char i=0; i < LEDS_PER_NODE; i++){
+        led.setPixelColor(i, red, green, blue);
+      }
+      led.show();
     }
-    for(char i=0; i < LEDS_PER_NODE; i++){
-      led.setPixelColor(i, red, green, blue);
-    }
-    led.show();
   }
 }
 
