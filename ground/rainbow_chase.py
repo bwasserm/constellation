@@ -14,6 +14,7 @@ def color(degrees):
 def main():
     ground = GroundBase()
     ground.parse_args()
+
     nodes = dict()
     degrees = 0
 
@@ -23,7 +24,7 @@ def main():
         degrees += 1
 
         # Map each node to a closes
-        for node_id in range(ground.NUM_NODES):
+        for node_id in ground.active_nodes:
             nodes[node_id] = color(degrees + node_id * 15)
         ground.set_nodes(nodes)
         time.sleep(frame_delay)

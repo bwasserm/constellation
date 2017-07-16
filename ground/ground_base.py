@@ -72,6 +72,7 @@ class Frame(object):
 class GroundBase(object):
 
     NUM_NODES = 100
+    ALL_NODES = range(1, NUM_NODES+1)
 
     def __init__(self):
         self.args = None
@@ -85,7 +86,7 @@ class GroundBase(object):
         self.out_counter = 0
 
         #self.source = DMXSource(universe=1, bind_ip="192.168.0.199")
-        self.source = DMXSource(universe=1, bind_ip="192.168.1.115")
+        self.source = DMXSource(universe=1, bind_ip="192.168.1.253")
 
         # Set up command line arguments
         self.argparse.add_argument('--dest_addr',
@@ -94,12 +95,17 @@ class GroundBase(object):
         self.argparse.add_argument('--listen_port', type=int,
                                    help="Port to listen for frame packets on",
                                    default=10002)
+        self.argparse.add_argument("nodes", type=int, metavar="N", nargs="*",
+                                   help="Nodes to control exclusively",
+                                   default=self.ALL_NODES)
 
+        self.active_nodes = self.ALL_NODES
         self.nodes = dict()
         self.sacn_frame = [0] * (4 * self.NUM_NODES)
         
     def parse_args(self):
         self.args = self.argparse.parse_args()
+        self.active_nodes = self.args.nodes
 
         # Create sockets
         self.in_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -150,14 +156,14 @@ class GroundBase(object):
                 pass
 
     def _generate_packet(self, nodes):
-        for node_id in range(self.NUM_NODES):
+        for node_id in self.ALL_NODES:
             if node_id in nodes:
                 r, g, b, a = [int(x) for x in nodes[node_id]]
                 self.nodes[node_id] = (r, g, b, a)
             else:
                 # No new value for this node, use last value
                 r, g, b, a = self.nodes.get(node_id, (0, 0, 0, 0))
-            self.sacn_frame[node_id*4:node_id*4+4] = [r, g, b, a]
+            self.sacn_frame[(node_id-1)*4:node_id*4] = [r, g, b, a]
         return self.sacn_frame
 
     def _send_packet_ip(self, packet):
