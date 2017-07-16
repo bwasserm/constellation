@@ -3,7 +3,7 @@
 #include <E131.h>
 #include <Adafruit_NeoPixel.h>
 
-#define NODE_INDEX 9
+#define NODE_INDEX 0
 #define MAX_NUM_NODES 100
 #define UNIVERSE 1
 #define PIXEL_OFFSET (4 * (NODE_INDEX))
@@ -54,7 +54,7 @@ byte neopix_gamma[] = {
 E131 e131;
 
 // Num pixels, pin, pixel type
-Adafruit_NeoPixel led = Adafruit_NeoPixel(2, LED_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel led = Adafruit_NeoPixel(LEDS_PER_NODE, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 typedef struct led_t{
   char red;
