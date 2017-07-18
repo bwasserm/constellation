@@ -40,3 +40,5 @@ Run any of the python scripts in ground/ (other than ground_base.py) and they sh
 
 ** Building node code
 Follow the instructions for "Installing Git Version": https://github.com/esp8266/Arduino#using-git-version
+Git submodule update --init the constellation repo.
+Change the Arduino Sketchbook directory to the constellation root.
