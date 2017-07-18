@@ -1438,7 +1438,7 @@
    <Source>C:/Users/Public/Music/Sample Music/Kalimba.mp3</Source>
   </Function>
   <Function ID="2" Type="RGBMatrix" Name="Audio">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>PingPong</RunOrder>
    <Algorithm Type="Audio"/>
@@ -1448,7 +1448,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="3" Type="RGBMatrix" Name="Image">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>PingPong</RunOrder>
    <Algorithm Type="Image">
@@ -1458,17 +1458,18 @@
    </Algorithm>
    <DimmerControl>1</DimmerControl>
    <MonoColor>4294901760</MonoColor>
+   <EndColor>4288471552</EndColor>
    <FixtureGroup>0</FixtureGroup>
+   <Property Name="color2Index" Value="Red"/>
+   <Property Name="stepsize" Value="25"/>
    <Property Name="presetSize" Value="5"/>
    <Property Name="color3Index" Value="Green"/>
-   <Property Name="color4Index" Value="Blue"/>
-   <Property Name="ramp" Value="15"/>
-   <Property Name="color2Index" Value="Red"/>
    <Property Name="color5Index" Value="OFF"/>
-   <Property Name="stepsize" Value="25"/>
+   <Property Name="ramp" Value="15"/>
+   <Property Name="color4Index" Value="Blue"/>
   </Function>
   <Function ID="5" Type="RGBMatrix" Name="Fill To Center">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Backward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Squares From Center</Algorithm>
@@ -1479,7 +1480,7 @@
    <Property Name="fillSquares" Value="Yes"/>
   </Function>
   <Function ID="6" Type="Scene" Name="Grid">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="20">0,0,1,0,2,0,3,0</FixtureVal>
    <FixtureVal ID="89">0,0,1,0,2,0,3,0</FixtureVal>
    <FixtureVal ID="59">0,0,1,0,2,0,3,0</FixtureVal>
@@ -1582,7 +1583,7 @@
    <FixtureVal ID="99">0,0,1,0,2,0,3,0</FixtureVal>
   </Function>
   <Function ID="7" Type="Sequence" Name="Animation Opposite - Generic RGB" BoundScene="6">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <SpeedModes FadeIn="Default" FadeOut="Default" Duration="PerStep"/>
@@ -1701,16 +1702,17 @@
    <FixtureVal ID="99">3,255</FixtureVal>
   </Function>
   <Function ID="9" Type="RGBMatrix" Name="The Matrix">
-   <Speed FadeIn="0" FadeOut="0" Duration="100"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Vertical fall</Algorithm>
    <DimmerControl>1</DimmerControl>
    <MonoColor>4278243584</MonoColor>
+   <EndColor>4278452108</EndColor>
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="10" Type="RGBMatrix" Name="ROCKETMAN">
-   <Speed FadeIn="0" FadeOut="0" Duration="153"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Text">
@@ -1724,7 +1726,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="98" Type="Scene" Name="Red scene - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255</FixtureVal>
    <FixtureVal ID="1">0,255</FixtureVal>
    <FixtureVal ID="2">0,255</FixtureVal>
@@ -1827,7 +1829,7 @@
    <FixtureVal ID="99">0,255</FixtureVal>
   </Function>
   <Function ID="99" Type="Scene" Name="Red scene - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,255</FixtureVal>
    <FixtureVal ID="3">0,255</FixtureVal>
    <FixtureVal ID="5">0,255</FixtureVal>
@@ -1880,7 +1882,7 @@
    <FixtureVal ID="99">0,255</FixtureVal>
   </Function>
   <Function ID="100" Type="Scene" Name="Red scene - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255</FixtureVal>
    <FixtureVal ID="2">0,255</FixtureVal>
    <FixtureVal ID="4">0,255</FixtureVal>
@@ -1933,7 +1935,7 @@
    <FixtureVal ID="98">0,255</FixtureVal>
   </Function>
   <Function ID="101" Type="Scene" Name="Green scene - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">1,255</FixtureVal>
    <FixtureVal ID="1">1,255</FixtureVal>
    <FixtureVal ID="2">1,255</FixtureVal>
@@ -2036,7 +2038,7 @@
    <FixtureVal ID="99">1,255</FixtureVal>
   </Function>
   <Function ID="102" Type="Scene" Name="Green scene - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">1,255</FixtureVal>
    <FixtureVal ID="3">1,255</FixtureVal>
    <FixtureVal ID="5">1,255</FixtureVal>
@@ -2089,7 +2091,7 @@
    <FixtureVal ID="99">1,255</FixtureVal>
   </Function>
   <Function ID="103" Type="Scene" Name="Green scene - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">1,255</FixtureVal>
    <FixtureVal ID="2">1,255</FixtureVal>
    <FixtureVal ID="4">1,255</FixtureVal>
@@ -2142,7 +2144,7 @@
    <FixtureVal ID="98">1,255</FixtureVal>
   </Function>
   <Function ID="104" Type="Scene" Name="Blue scene - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">2,255</FixtureVal>
    <FixtureVal ID="1">2,255</FixtureVal>
    <FixtureVal ID="2">2,255</FixtureVal>
@@ -2245,7 +2247,7 @@
    <FixtureVal ID="99">2,255</FixtureVal>
   </Function>
   <Function ID="105" Type="Scene" Name="Blue scene - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">2,255</FixtureVal>
    <FixtureVal ID="3">2,255</FixtureVal>
    <FixtureVal ID="5">2,255</FixtureVal>
@@ -2298,7 +2300,7 @@
    <FixtureVal ID="99">2,255</FixtureVal>
   </Function>
   <Function ID="106" Type="Scene" Name="Blue scene - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">2,255</FixtureVal>
    <FixtureVal ID="2">2,255</FixtureVal>
    <FixtureVal ID="4">2,255</FixtureVal>
@@ -2351,7 +2353,7 @@
    <FixtureVal ID="98">2,255</FixtureVal>
   </Function>
   <Function ID="107" Type="Chaser" Name="Primary colours chaser - Generic RGB">
-   <Speed FadeIn="3000" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="3000" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <SpeedModes FadeIn="Common" FadeOut="Common" Duration="Common"/>
@@ -2366,7 +2368,7 @@
    <Step Number="8" FadeIn="0" Hold="0" FadeOut="0">106</Step>
   </Function>
   <Function ID="108" Type="Scene" Name="Scene Black - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,0,2,0</FixtureVal>
    <FixtureVal ID="1">0,0,1,0,2,0</FixtureVal>
    <FixtureVal ID="2">0,0,1,0,2,0</FixtureVal>
@@ -2469,7 +2471,7 @@
    <FixtureVal ID="99">0,0,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="109" Type="Scene" Name="Scene Black - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,0,1,0,2,0</FixtureVal>
    <FixtureVal ID="3">0,0,1,0,2,0</FixtureVal>
    <FixtureVal ID="5">0,0,1,0,2,0</FixtureVal>
@@ -2522,7 +2524,7 @@
    <FixtureVal ID="99">0,0,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="110" Type="Scene" Name="Scene Black - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,0,2,0</FixtureVal>
    <FixtureVal ID="2">0,0,1,0,2,0</FixtureVal>
    <FixtureVal ID="4">0,0,1,0,2,0</FixtureVal>
@@ -2575,7 +2577,7 @@
    <FixtureVal ID="98">0,0,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="111" Type="Scene" Name="Scene Dark Blue - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,0,2,128</FixtureVal>
    <FixtureVal ID="1">0,0,1,0,2,128</FixtureVal>
    <FixtureVal ID="2">0,0,1,0,2,128</FixtureVal>
@@ -2678,7 +2680,7 @@
    <FixtureVal ID="99">0,0,1,0,2,128</FixtureVal>
   </Function>
   <Function ID="112" Type="Scene" Name="Scene Dark Blue - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,0,1,0,2,128</FixtureVal>
    <FixtureVal ID="3">0,0,1,0,2,128</FixtureVal>
    <FixtureVal ID="5">0,0,1,0,2,128</FixtureVal>
@@ -2731,7 +2733,7 @@
    <FixtureVal ID="99">0,0,1,0,2,128</FixtureVal>
   </Function>
   <Function ID="113" Type="Scene" Name="Scene Dark Blue - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,0,2,128</FixtureVal>
    <FixtureVal ID="2">0,0,1,0,2,128</FixtureVal>
    <FixtureVal ID="4">0,0,1,0,2,128</FixtureVal>
@@ -2784,7 +2786,7 @@
    <FixtureVal ID="98">0,0,1,0,2,128</FixtureVal>
   </Function>
   <Function ID="114" Type="Scene" Name="Scene Blue - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,0,2,255</FixtureVal>
    <FixtureVal ID="1">0,0,1,0,2,255</FixtureVal>
    <FixtureVal ID="2">0,0,1,0,2,255</FixtureVal>
@@ -2887,7 +2889,7 @@
    <FixtureVal ID="99">0,0,1,0,2,255</FixtureVal>
   </Function>
   <Function ID="115" Type="Scene" Name="Scene Blue - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,0,1,0,2,255</FixtureVal>
    <FixtureVal ID="3">0,0,1,0,2,255</FixtureVal>
    <FixtureVal ID="5">0,0,1,0,2,255</FixtureVal>
@@ -2940,7 +2942,7 @@
    <FixtureVal ID="99">0,0,1,0,2,255</FixtureVal>
   </Function>
   <Function ID="116" Type="Scene" Name="Scene Blue - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,0,2,255</FixtureVal>
    <FixtureVal ID="2">0,0,1,0,2,255</FixtureVal>
    <FixtureVal ID="4">0,0,1,0,2,255</FixtureVal>
@@ -2993,7 +2995,7 @@
    <FixtureVal ID="98">0,0,1,0,2,255</FixtureVal>
   </Function>
   <Function ID="117" Type="Scene" Name="Scene Dark Green - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,128,2,0</FixtureVal>
    <FixtureVal ID="1">0,0,1,128,2,0</FixtureVal>
    <FixtureVal ID="2">0,0,1,128,2,0</FixtureVal>
@@ -3096,7 +3098,7 @@
    <FixtureVal ID="99">0,0,1,128,2,0</FixtureVal>
   </Function>
   <Function ID="118" Type="Scene" Name="Scene Dark Green - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,0,1,128,2,0</FixtureVal>
    <FixtureVal ID="3">0,0,1,128,2,0</FixtureVal>
    <FixtureVal ID="5">0,0,1,128,2,0</FixtureVal>
@@ -3149,7 +3151,7 @@
    <FixtureVal ID="99">0,0,1,128,2,0</FixtureVal>
   </Function>
   <Function ID="119" Type="Scene" Name="Scene Dark Green - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,128,2,0</FixtureVal>
    <FixtureVal ID="2">0,0,1,128,2,0</FixtureVal>
    <FixtureVal ID="4">0,0,1,128,2,0</FixtureVal>
@@ -3202,7 +3204,7 @@
    <FixtureVal ID="98">0,0,1,128,2,0</FixtureVal>
   </Function>
   <Function ID="120" Type="Scene" Name="Scene Dark Cyan - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,128,2,128</FixtureVal>
    <FixtureVal ID="1">0,0,1,128,2,128</FixtureVal>
    <FixtureVal ID="2">0,0,1,128,2,128</FixtureVal>
@@ -3305,7 +3307,7 @@
    <FixtureVal ID="99">0,0,1,128,2,128</FixtureVal>
   </Function>
   <Function ID="121" Type="Scene" Name="Scene Dark Cyan - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,0,1,128,2,128</FixtureVal>
    <FixtureVal ID="3">0,0,1,128,2,128</FixtureVal>
    <FixtureVal ID="5">0,0,1,128,2,128</FixtureVal>
@@ -3358,7 +3360,7 @@
    <FixtureVal ID="99">0,0,1,128,2,128</FixtureVal>
   </Function>
   <Function ID="122" Type="Scene" Name="Scene Dark Cyan - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,128,2,128</FixtureVal>
    <FixtureVal ID="2">0,0,1,128,2,128</FixtureVal>
    <FixtureVal ID="4">0,0,1,128,2,128</FixtureVal>
@@ -3411,7 +3413,7 @@
    <FixtureVal ID="98">0,0,1,128,2,128</FixtureVal>
   </Function>
   <Function ID="123" Type="Scene" Name="Scene Green - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,255,2,0</FixtureVal>
    <FixtureVal ID="1">0,0,1,255,2,0</FixtureVal>
    <FixtureVal ID="2">0,0,1,255,2,0</FixtureVal>
@@ -3514,7 +3516,7 @@
    <FixtureVal ID="99">0,0,1,255,2,0</FixtureVal>
   </Function>
   <Function ID="124" Type="Scene" Name="Scene Green - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,0,1,255,2,0</FixtureVal>
    <FixtureVal ID="3">0,0,1,255,2,0</FixtureVal>
    <FixtureVal ID="5">0,0,1,255,2,0</FixtureVal>
@@ -3567,7 +3569,7 @@
    <FixtureVal ID="99">0,0,1,255,2,0</FixtureVal>
   </Function>
   <Function ID="125" Type="Scene" Name="Scene Green - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,255,2,0</FixtureVal>
    <FixtureVal ID="2">0,0,1,255,2,0</FixtureVal>
    <FixtureVal ID="4">0,0,1,255,2,0</FixtureVal>
@@ -3620,7 +3622,7 @@
    <FixtureVal ID="98">0,0,1,255,2,0</FixtureVal>
   </Function>
   <Function ID="126" Type="Scene" Name="Scene Cyan - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,255,2,255</FixtureVal>
    <FixtureVal ID="1">0,0,1,255,2,255</FixtureVal>
    <FixtureVal ID="2">0,0,1,255,2,255</FixtureVal>
@@ -3723,7 +3725,7 @@
    <FixtureVal ID="99">0,0,1,255,2,255</FixtureVal>
   </Function>
   <Function ID="127" Type="Scene" Name="Scene Cyan - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,0,1,255,2,255</FixtureVal>
    <FixtureVal ID="3">0,0,1,255,2,255</FixtureVal>
    <FixtureVal ID="5">0,0,1,255,2,255</FixtureVal>
@@ -3776,7 +3778,7 @@
    <FixtureVal ID="99">0,0,1,255,2,255</FixtureVal>
   </Function>
   <Function ID="128" Type="Scene" Name="Scene Cyan - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,0,1,255,2,255</FixtureVal>
    <FixtureVal ID="2">0,0,1,255,2,255</FixtureVal>
    <FixtureVal ID="4">0,0,1,255,2,255</FixtureVal>
@@ -3829,7 +3831,7 @@
    <FixtureVal ID="98">0,0,1,255,2,255</FixtureVal>
   </Function>
   <Function ID="129" Type="Scene" Name="Scene Dark Red - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,0,2,0</FixtureVal>
    <FixtureVal ID="1">0,128,1,0,2,0</FixtureVal>
    <FixtureVal ID="2">0,128,1,0,2,0</FixtureVal>
@@ -3932,7 +3934,7 @@
    <FixtureVal ID="99">0,128,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="130" Type="Scene" Name="Scene Dark Red - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,128,1,0,2,0</FixtureVal>
    <FixtureVal ID="3">0,128,1,0,2,0</FixtureVal>
    <FixtureVal ID="5">0,128,1,0,2,0</FixtureVal>
@@ -3985,7 +3987,7 @@
    <FixtureVal ID="99">0,128,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="131" Type="Scene" Name="Scene Dark Red - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,0,2,0</FixtureVal>
    <FixtureVal ID="2">0,128,1,0,2,0</FixtureVal>
    <FixtureVal ID="4">0,128,1,0,2,0</FixtureVal>
@@ -4038,7 +4040,7 @@
    <FixtureVal ID="98">0,128,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="132" Type="Scene" Name="Scene Dark Magenta - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,0,2,128</FixtureVal>
    <FixtureVal ID="1">0,128,1,0,2,128</FixtureVal>
    <FixtureVal ID="2">0,128,1,0,2,128</FixtureVal>
@@ -4141,7 +4143,7 @@
    <FixtureVal ID="99">0,128,1,0,2,128</FixtureVal>
   </Function>
   <Function ID="133" Type="Scene" Name="Scene Dark Magenta - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,128,1,0,2,128</FixtureVal>
    <FixtureVal ID="3">0,128,1,0,2,128</FixtureVal>
    <FixtureVal ID="5">0,128,1,0,2,128</FixtureVal>
@@ -4194,7 +4196,7 @@
    <FixtureVal ID="99">0,128,1,0,2,128</FixtureVal>
   </Function>
   <Function ID="134" Type="Scene" Name="Scene Dark Magenta - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,0,2,128</FixtureVal>
    <FixtureVal ID="2">0,128,1,0,2,128</FixtureVal>
    <FixtureVal ID="4">0,128,1,0,2,128</FixtureVal>
@@ -4247,7 +4249,7 @@
    <FixtureVal ID="98">0,128,1,0,2,128</FixtureVal>
   </Function>
   <Function ID="135" Type="Scene" Name="Scene Dark Yellow - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,128,2,0</FixtureVal>
    <FixtureVal ID="1">0,128,1,128,2,0</FixtureVal>
    <FixtureVal ID="2">0,128,1,128,2,0</FixtureVal>
@@ -4350,7 +4352,7 @@
    <FixtureVal ID="99">0,128,1,128,2,0</FixtureVal>
   </Function>
   <Function ID="136" Type="Scene" Name="Scene Dark Yellow - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,128,1,128,2,0</FixtureVal>
    <FixtureVal ID="3">0,128,1,128,2,0</FixtureVal>
    <FixtureVal ID="5">0,128,1,128,2,0</FixtureVal>
@@ -4403,7 +4405,7 @@
    <FixtureVal ID="99">0,128,1,128,2,0</FixtureVal>
   </Function>
   <Function ID="137" Type="Scene" Name="Scene Dark Yellow - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,128,2,0</FixtureVal>
    <FixtureVal ID="2">0,128,1,128,2,0</FixtureVal>
    <FixtureVal ID="4">0,128,1,128,2,0</FixtureVal>
@@ -4456,7 +4458,7 @@
    <FixtureVal ID="98">0,128,1,128,2,0</FixtureVal>
   </Function>
   <Function ID="138" Type="Scene" Name="Scene Dark Gray - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,128,2,128</FixtureVal>
    <FixtureVal ID="1">0,128,1,128,2,128</FixtureVal>
    <FixtureVal ID="2">0,128,1,128,2,128</FixtureVal>
@@ -4559,7 +4561,7 @@
    <FixtureVal ID="99">0,128,1,128,2,128</FixtureVal>
   </Function>
   <Function ID="139" Type="Scene" Name="Scene Dark Gray - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,128,1,128,2,128</FixtureVal>
    <FixtureVal ID="3">0,128,1,128,2,128</FixtureVal>
    <FixtureVal ID="5">0,128,1,128,2,128</FixtureVal>
@@ -4612,7 +4614,7 @@
    <FixtureVal ID="99">0,128,1,128,2,128</FixtureVal>
   </Function>
   <Function ID="140" Type="Scene" Name="Scene Dark Gray - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,128,1,128,2,128</FixtureVal>
    <FixtureVal ID="2">0,128,1,128,2,128</FixtureVal>
    <FixtureVal ID="4">0,128,1,128,2,128</FixtureVal>
@@ -4665,7 +4667,7 @@
    <FixtureVal ID="98">0,128,1,128,2,128</FixtureVal>
   </Function>
   <Function ID="141" Type="Scene" Name="Scene Light Gray - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,192,1,192,2,192</FixtureVal>
    <FixtureVal ID="1">0,192,1,192,2,192</FixtureVal>
    <FixtureVal ID="2">0,192,1,192,2,192</FixtureVal>
@@ -4768,7 +4770,7 @@
    <FixtureVal ID="99">0,192,1,192,2,192</FixtureVal>
   </Function>
   <Function ID="142" Type="Scene" Name="Scene Light Gray - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,192,1,192,2,192</FixtureVal>
    <FixtureVal ID="3">0,192,1,192,2,192</FixtureVal>
    <FixtureVal ID="5">0,192,1,192,2,192</FixtureVal>
@@ -4821,7 +4823,7 @@
    <FixtureVal ID="99">0,192,1,192,2,192</FixtureVal>
   </Function>
   <Function ID="143" Type="Scene" Name="Scene Light Gray - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,192,1,192,2,192</FixtureVal>
    <FixtureVal ID="2">0,192,1,192,2,192</FixtureVal>
    <FixtureVal ID="4">0,192,1,192,2,192</FixtureVal>
@@ -4874,7 +4876,7 @@
    <FixtureVal ID="98">0,192,1,192,2,192</FixtureVal>
   </Function>
   <Function ID="144" Type="Scene" Name="Scene Red - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,0,2,0</FixtureVal>
    <FixtureVal ID="1">0,255,1,0,2,0</FixtureVal>
    <FixtureVal ID="2">0,255,1,0,2,0</FixtureVal>
@@ -4977,7 +4979,7 @@
    <FixtureVal ID="99">0,255,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="145" Type="Scene" Name="Scene Red - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,255,1,0,2,0</FixtureVal>
    <FixtureVal ID="3">0,255,1,0,2,0</FixtureVal>
    <FixtureVal ID="5">0,255,1,0,2,0</FixtureVal>
@@ -5030,7 +5032,7 @@
    <FixtureVal ID="99">0,255,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="146" Type="Scene" Name="Scene Red - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,0,2,0</FixtureVal>
    <FixtureVal ID="2">0,255,1,0,2,0</FixtureVal>
    <FixtureVal ID="4">0,255,1,0,2,0</FixtureVal>
@@ -5083,7 +5085,7 @@
    <FixtureVal ID="98">0,255,1,0,2,0</FixtureVal>
   </Function>
   <Function ID="147" Type="Scene" Name="Scene Magenta - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,0,2,255</FixtureVal>
    <FixtureVal ID="1">0,255,1,0,2,255</FixtureVal>
    <FixtureVal ID="2">0,255,1,0,2,255</FixtureVal>
@@ -5186,7 +5188,7 @@
    <FixtureVal ID="99">0,255,1,0,2,255</FixtureVal>
   </Function>
   <Function ID="148" Type="Scene" Name="Scene Magenta - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,255,1,0,2,255</FixtureVal>
    <FixtureVal ID="3">0,255,1,0,2,255</FixtureVal>
    <FixtureVal ID="5">0,255,1,0,2,255</FixtureVal>
@@ -5239,7 +5241,7 @@
    <FixtureVal ID="99">0,255,1,0,2,255</FixtureVal>
   </Function>
   <Function ID="149" Type="Scene" Name="Scene Magenta - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,0,2,255</FixtureVal>
    <FixtureVal ID="2">0,255,1,0,2,255</FixtureVal>
    <FixtureVal ID="4">0,255,1,0,2,255</FixtureVal>
@@ -5292,7 +5294,7 @@
    <FixtureVal ID="98">0,255,1,0,2,255</FixtureVal>
   </Function>
   <Function ID="150" Type="Scene" Name="Scene Yellow - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,255,2,0</FixtureVal>
    <FixtureVal ID="1">0,255,1,255,2,0</FixtureVal>
    <FixtureVal ID="2">0,255,1,255,2,0</FixtureVal>
@@ -5395,7 +5397,7 @@
    <FixtureVal ID="99">0,255,1,255,2,0</FixtureVal>
   </Function>
   <Function ID="151" Type="Scene" Name="Scene Yellow - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,255,1,255,2,0</FixtureVal>
    <FixtureVal ID="3">0,255,1,255,2,0</FixtureVal>
    <FixtureVal ID="5">0,255,1,255,2,0</FixtureVal>
@@ -5448,7 +5450,7 @@
    <FixtureVal ID="99">0,255,1,255,2,0</FixtureVal>
   </Function>
   <Function ID="152" Type="Scene" Name="Scene Yellow - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,255,2,0</FixtureVal>
    <FixtureVal ID="2">0,255,1,255,2,0</FixtureVal>
    <FixtureVal ID="4">0,255,1,255,2,0</FixtureVal>
@@ -5501,7 +5503,7 @@
    <FixtureVal ID="98">0,255,1,255,2,0</FixtureVal>
   </Function>
   <Function ID="153" Type="Scene" Name="Scene White - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,255,2,255</FixtureVal>
    <FixtureVal ID="1">0,255,1,255,2,255</FixtureVal>
    <FixtureVal ID="2">0,255,1,255,2,255</FixtureVal>
@@ -5604,7 +5606,7 @@
    <FixtureVal ID="99">0,255,1,255,2,255</FixtureVal>
   </Function>
   <Function ID="154" Type="Scene" Name="Scene White - Generic RGB (Even)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="1">0,255,1,255,2,255</FixtureVal>
    <FixtureVal ID="3">0,255,1,255,2,255</FixtureVal>
    <FixtureVal ID="5">0,255,1,255,2,255</FixtureVal>
@@ -5657,7 +5659,7 @@
    <FixtureVal ID="99">0,255,1,255,2,255</FixtureVal>
   </Function>
   <Function ID="155" Type="Scene" Name="Scene White - Generic RGB (Odd)">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <FixtureVal ID="0">0,255,1,255,2,255</FixtureVal>
    <FixtureVal ID="2">0,255,1,255,2,255</FixtureVal>
    <FixtureVal ID="4">0,255,1,255,2,255</FixtureVal>
@@ -5710,7 +5712,7 @@
    <FixtureVal ID="98">0,255,1,255,2,255</FixtureVal>
   </Function>
   <Function ID="156" Type="Chaser" Name="16 Colours chaser - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Random</RunOrder>
    <SpeedModes FadeIn="Common" FadeOut="Common" Duration="Common"/>
@@ -5762,7 +5764,7 @@
    <Step Number="45" FadeIn="0" Hold="0" FadeOut="0">155</Step>
   </Function>
   <Function ID="157" Type="RGBMatrix" Name="CONSTELLATION">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Text">
@@ -5777,7 +5779,7 @@
    <Property Name="presetNumber" Value="5"/>
   </Function>
   <Function ID="158" Type="RGBMatrix" Name="Animation Balls (Colors) - Generic RGB" BlendMode="Additive">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>PingPong</RunOrder>
    <Algorithm Type="Script">Balls (Colors)</Algorithm>
@@ -5785,16 +5787,16 @@
    <MonoColor>4294901760</MonoColor>
    <EndColor>4278190080</EndColor>
    <FixtureGroup>0</FixtureGroup>
+   <Property Name="color2Index" Value="Red"/>
    <Property Name="presetSize" Value="1"/>
    <Property Name="color3Index" Value="Green"/>
    <Property Name="presetNumber" Value="5"/>
-   <Property Name="presetCollision" Value="Yes"/>
-   <Property Name="color4Index" Value="Blue"/>
-   <Property Name="color2Index" Value="Red"/>
    <Property Name="color5Index" Value="Orange"/>
+   <Property Name="color4Index" Value="Blue"/>
+   <Property Name="presetCollision" Value="Yes"/>
   </Function>
   <Function ID="159" Type="RGBMatrix" Name="Animation Circles - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Backward</Direction>
    <RunOrder>PingPong</RunOrder>
    <Algorithm Type="Script">Circles</Algorithm>
@@ -5802,11 +5804,11 @@
    <MonoColor>4294923520</MonoColor>
    <EndColor>4278190335</EndColor>
    <FixtureGroup>0</FixtureGroup>
-   <Property Name="circlesAmount" Value="2"/>
    <Property Name="fadeMode" Value="Fade In"/>
+   <Property Name="circlesAmount" Value="2"/>
   </Function>
   <Function ID="160" Type="RGBMatrix" Name="Animation Even/Odd - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Even/Odd</Algorithm>
@@ -5815,7 +5817,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="161" Type="RGBMatrix" Name="Animation Fill - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Fill</Algorithm>
@@ -5824,7 +5826,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="162" Type="RGBMatrix" Name="Animation Fill From Center - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Fill From Center</Algorithm>
@@ -5834,7 +5836,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="163" Type="RGBMatrix" Name="Animation Fill Unfill - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Fill Unfill</Algorithm>
@@ -5843,7 +5845,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="164" Type="RGBMatrix" Name="Animation Fill Unfill From Center - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Fill Unfill From Center</Algorithm>
@@ -5852,7 +5854,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="165" Type="RGBMatrix" Name="Animation Fill Unfill Squares From Center - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Fill Unfill Squares From Center</Algorithm>
@@ -5861,7 +5863,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="166" Type="RGBMatrix" Name="Animation Gradient - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Gradient</Algorithm>
@@ -5873,7 +5875,7 @@
    <Property Name="orientation" Value="Radial"/>
   </Function>
   <Function ID="167" Type="RGBMatrix" Name="Animation One By One - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>PingPong</RunOrder>
    <Algorithm Type="Script">One By One</Algorithm>
@@ -5883,7 +5885,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="168" Type="RGBMatrix" Name="Animation Opposite - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Opposite</Algorithm>
@@ -5894,36 +5896,36 @@
    <Property Name="orientation" Value="Horizontal"/>
   </Function>
   <Function ID="169" Type="RGBMatrix" Name="Animation Plasma - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Plasma</Algorithm>
    <DimmerControl>1</DimmerControl>
    <MonoColor>4294901760</MonoColor>
    <FixtureGroup>0</FixtureGroup>
-   <Property Name="presetSize" Value="4"/>
-   <Property Name="ramp" Value="20"/>
-   <Property Name="presetIndex" Value="Rainbow"/>
    <Property Name="stepsize" Value="30"/>
+   <Property Name="presetSize" Value="4"/>
+   <Property Name="presetIndex" Value="Rainbow"/>
+   <Property Name="ramp" Value="20"/>
   </Function>
   <Function ID="170" Type="RGBMatrix" Name="Animation Plasma (Colors) - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Plasma (Colors)</Algorithm>
    <DimmerControl>1</DimmerControl>
    <MonoColor>4294901760</MonoColor>
    <FixtureGroup>0</FixtureGroup>
+   <Property Name="color2Index" Value="Red"/>
+   <Property Name="stepsize" Value="25"/>
    <Property Name="presetSize" Value="6"/>
    <Property Name="color3Index" Value="Green"/>
-   <Property Name="color4Index" Value="Blue"/>
-   <Property Name="ramp" Value="15"/>
-   <Property Name="color2Index" Value="Red"/>
    <Property Name="color5Index" Value="OFF"/>
-   <Property Name="stepsize" Value="25"/>
+   <Property Name="ramp" Value="15"/>
+   <Property Name="color4Index" Value="Blue"/>
   </Function>
   <Function ID="171" Type="RGBMatrix" Name="Animation Random Column - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Random Column</Algorithm>
@@ -5932,7 +5934,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="172" Type="RGBMatrix" Name="Animation Random Fill Column - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Random Fill Column</Algorithm>
@@ -5941,7 +5943,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="173" Type="RGBMatrix" Name="Animation Random Fill Row - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Random Fill Row</Algorithm>
@@ -5950,7 +5952,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="174" Type="RGBMatrix" Name="Animation Random Fill Single - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Random Fill Single</Algorithm>
@@ -5959,7 +5961,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="175" Type="RGBMatrix" Name="Animation Random Row - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Random Row</Algorithm>
@@ -5968,7 +5970,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="176" Type="RGBMatrix" Name="Animation Random Single - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Random Single</Algorithm>
@@ -5978,17 +5980,20 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="177" Type="RGBMatrix" Name="Animation Squares - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Squares</Algorithm>
    <DimmerControl>1</DimmerControl>
-   <MonoColor>4294901760</MonoColor>
+   <MonoColor>4278233855</MonoColor>
+   <EndColor>4294967040</EndColor>
    <FixtureGroup>0</FixtureGroup>
-   <Property Name="squaresAmount" Value="3"/>
+   <Property Name="fadeMode" Value="Fade Out"/>
+   <Property Name="fillSquares" Value="No"/>
+   <Property Name="squaresAmount" Value="2"/>
   </Function>
   <Function ID="178" Type="RGBMatrix" Name="Animation Squares From Center - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Squares From Center</Algorithm>
@@ -5997,7 +6002,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="179" Type="RGBMatrix" Name="Animation Stripes - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Stripes</Algorithm>
@@ -6006,7 +6011,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="180" Type="RGBMatrix" Name="Animation Stripes From Center - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Stripes From Center</Algorithm>
@@ -6015,7 +6020,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="181" Type="RGBMatrix" Name="Animation Strobe - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Strobe</Algorithm>
@@ -6024,7 +6029,7 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="182" Type="RGBMatrix" Name="Animation Vertical fall - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>Loop</RunOrder>
    <Algorithm Type="Script">Vertical fall</Algorithm>
@@ -6033,16 +6038,18 @@
    <FixtureGroup>0</FixtureGroup>
   </Function>
   <Function ID="183" Type="RGBMatrix" Name="Animation Waves - Generic RGB">
-   <Speed FadeIn="0" FadeOut="0" Duration="152"/>
+   <Speed FadeIn="0" FadeOut="0" Duration="571"/>
    <Direction>Forward</Direction>
    <RunOrder>PingPong</RunOrder>
    <Algorithm Type="Script">Waves</Algorithm>
    <DimmerControl>1</DimmerControl>
-   <MonoColor>4294901760</MonoColor>
+   <MonoColor>4294901887</MonoColor>
+   <EndColor>4278255360</EndColor>
    <FixtureGroup>0</FixtureGroup>
-   <Property Name="tailfade" Value="Yes"/>
    <Property Name="taillength" Value="50"/>
-   <Property Name="direction" Value="Right"/>
+   <Property Name="orientation" Value="Vertical"/>
+   <Property Name="tailfade" Value="Yes"/>
+   <Property Name="direction" Value="Out"/>
   </Function>
   <Monitor DisplayMode="0" ShowLabels="0">
    <Font>Arial,12,-1,5,50,0,0,0,0,0</Font>
@@ -7479,7 +7486,9 @@
      </Appearance>
      <Visibility>196735</Visibility>
      <AbsoluteValue Minimum="0" Maximum="10000"/>
-     <Time>152</Time>
+     <ResetFactorOnDialChange>True</ResetFactorOnDialChange>
+     <Time>1143</Time>
+     <Key>T</Key>
      <Function FadeIn="0" FadeOut="0" Duration="6">9</Function>
      <Function FadeIn="0" FadeOut="0" Duration="6">152</Function>
      <Function FadeIn="0" FadeOut="0" Duration="6">151</Function>
@@ -7933,6 +7942,7 @@
      </Appearance>
      <Function ID="144"/>
      <Action>Flash</Action>
+     <Key>R</Key>
      <Intensity Adjust="False">100</Intensity>
     </Button>
     <Button Caption="Bump Green" ID="7" Icon="">
@@ -7946,6 +7956,7 @@
      </Appearance>
      <Function ID="123"/>
      <Action>Flash</Action>
+     <Key>G</Key>
      <Intensity Adjust="False">100</Intensity>
     </Button>
     <Button Caption="Bump Blue" ID="10" Icon="">
@@ -7959,6 +7970,7 @@
      </Appearance>
      <Function ID="114"/>
      <Action>Flash</Action>
+     <Key>B</Key>
      <Intensity Adjust="False">100</Intensity>
     </Button>
     <Button Caption="Bump Cyan" ID="14" Icon="">
@@ -8011,6 +8023,7 @@
      </Appearance>
      <Function ID="153"/>
      <Action>Flash</Action>
+     <Key>W</Key>
      <Intensity Adjust="False">100</Intensity>
     </Button>
     <Button Caption="" ID="18" Icon="">
@@ -8024,6 +8037,7 @@
      </Appearance>
      <Function ID="4294967295"/>
      <Action>StopAll</Action>
+     <Key>Q</Key>
      <Intensity Adjust="False">100</Intensity>
     </Button>
     <Button Caption="Control All" ID="19" Icon="">
@@ -8121,6 +8135,17 @@
      <Intensity Adjust="False">100</Intensity>
     </Button>
    </Frame>
+   <Matrix Caption="Image" ID="0">
+    <WindowState Visible="True" X="265" Y="565" Width="160" Height="120"/>
+    <Appearance>
+     <FrameStyle>Sunken</FrameStyle>
+     <ForegroundColor>Default</ForegroundColor>
+     <BackgroundColor>Default</BackgroundColor>
+     <BackgroundImage>None</BackgroundImage>
+     <Font>Default</Font>
+    </Appearance>
+    <Function ID="9" InstantApply="true"/>
+   </Matrix>
   </Frame>
   <Properties>
    <Size Width="1920" Height="1080"/>
