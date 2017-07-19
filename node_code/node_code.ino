@@ -3,10 +3,10 @@
 #include <E131.h>
 #include <Adafruit_NeoPixel.h>
 
-#define NODE_INDEX 0
+#define NODE_INDEX 11
 #define MAX_NUM_NODES 100
 #define UNIVERSE 1
-#define PIXEL_OFFSET (4 * (NODE_INDEX))
+#define PIXEL_OFFSET (4 * (NODE_INDEX - 1))
 
 const char* ssid     = "Constellation";
 const char* password = "constellation";
@@ -133,7 +133,7 @@ void setup() {
   led.begin();
   led.show();
 
-  set_leds(128, 0, 0, 0);
+  set_leds(128, 0, 0, 255);
 
   e131.beginMulticast(ssid, password, 1);  /* via Multicast for Universe 1 */
 
@@ -143,27 +143,30 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
     blink();
-    set_leds(255, 0, 0, 0);
+    set_leds(255, 0, 0, 255);
     delay(400);
-    set_leds(0, 255, 0, 0);
+    set_leds(0, 255, 0, 255);
     blink();
     Serial.write("Connecting to wifi...");
   }
   Serial.write("Connected to wifi");
-  set_leds(0, 0, 255, 0);
+  set_leds(0, 0, 255, 255);
 
 }
 
 void loop() {
 
-    /* Parse a packet and update pixels */
-    if(e131.parsePacket()) {
-        if (e131.universe == UNIVERSE) {
-            set_leds(e131.data[PIXEL_OFFSET + RED_OFFSET],
-                     e131.data[PIXEL_OFFSET + GREEN_OFFSET],
-                     e131.data[PIXEL_OFFSET + BLUE_OFFSET],
-                     e131.data[PIXEL_OFFSET + ALPHA_OFFSET]);
-        }
+    while(1){
+      /* Parse a packet and update pixels */
+      if(e131.parsePacket()) {
+          if (e131.universe == UNIVERSE) {
+              set_leds(e131.data[PIXEL_OFFSET + RED_OFFSET],
+                       e131.data[PIXEL_OFFSET + GREEN_OFFSET],
+                       e131.data[PIXEL_OFFSET + BLUE_OFFSET],
+                       e131.data[PIXEL_OFFSET + ALPHA_OFFSET]);
+          }
+          break;
+      }
     }
 }
 
