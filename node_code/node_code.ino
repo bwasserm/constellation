@@ -3,7 +3,7 @@
 #include <E131.h>
 #include <Adafruit_NeoPixel.h>
 
-#define NODE_INDEX 11
+#define NODE_INDEX 100
 #define MAX_NUM_NODES 100
 #define UNIVERSE 1
 #define PIXEL_OFFSET (4 * (NODE_INDEX - 1))
