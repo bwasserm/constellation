@@ -86,7 +86,8 @@ class GroundBase(object):
         self.out_counter = 0
 
         #self.source = DMXSource(universe=1, bind_ip="192.168.0.199")
-        self.source = DMXSource(universe=1, bind_ip="192.168.0.2")
+        #self.source = DMXSource(universe=1, bind_ip="192.168.0.2")
+        self.source = DMXSource(universe=1, bind_ip="192.168.1.243")
 
         # Set up command line arguments
         self.argparse.add_argument('--dest_addr',
